@@ -1,0 +1,73 @@
+#!nsh
+#
+# @name 3DR DIY Quad
+#
+# @type Quadrotor x
+#
+# @maintainer Geoff
+#
+
+if [ $AUTOCNF == yes ]
+then
+	param set TRIG_INTERVAL 33.3333
+	param set TRIG_POLARITY 0
+	param set TRIG_ACT_TIME 0.5
+	param set TRIG_MODE 1
+	param set TRIG_PINS 12
+	param set SYS_COMPANION 921600
+	param set MAV_SYS_ID 2
+	param set CBRK_AIRSPD_CHK 162128
+	param set CBRK_ENGINEFAIL 284953
+	param set CBRK_GPSFAIL 240024
+
+
+	param set CAL_ACC0_ID	1245962
+	param set CAL_ACC1_ID	0
+	param set CAL_ACC2_ID	0
+	param set CAL_ACC_PRIME	1245962
+	param set CAL_BARO_PRIME	0
+	param set CAL_GYRO0_ID	2163466
+	param set CAL_GYRO1_ID	2228490
+	param set CAL_GYRO2_ID	0
+	param set CAL_GYRO_PRIME	2163466
+	param set CAL_MAG0_ID	73233
+	param set CAL_MAG0_ROT	-1
+	param set CAL_MAG1_ID	0
+	param set CAL_MAG1_ROT	-1
+	param set CAL_MAG2_ID	0
+	param set CAL_MAG2_ROT	-1
+	param set CAL_MAG_PRIME	73233
+	param set CAL_MAG_SIDES	63
+
+
+
+fi
+
+set HIL no
+set VEHICLE_TYPE kontron
+set MIXER quad_ancl
+set MIXER_AUX pass
+set OUTPUT_MODE none
+set PWM_OUT none
+set PWM_RATE none
+set PWM_DISARMED none
+set PWM_MIN none
+set PWM_MAX none
+set PWM_AUX_OUT none
+set PWM_AUX_RATE none
+set PWM_AUX_DISARMED none
+set PWM_AUX_MIN none
+set PWM_AUX_MAX none
+set FAILSAFE_AUX none
+set MK_MODE none
+set FMU_MODE pwm
+set AUX_MODE pwm
+set MAVLINK_F "-d /dev/ttyS1 -b 115200 -m vicon -r 115200"
+set EXIT_ON_END no
+set MAV_TYPE none
+set LOAD_DAPPS yes
+set GPS no
+set GPS_FAKE no
+set FAILSAFE none
+
+
