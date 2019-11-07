@@ -62,7 +62,6 @@ set(config_module_list
 	modules/mc_att_control
 	modules/mc_pos_control
 	modules/mc_TASK
-#	modules/mc_ibvs
 
 	#
 	# Logging

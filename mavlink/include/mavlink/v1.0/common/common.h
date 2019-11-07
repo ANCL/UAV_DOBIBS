@@ -61,6 +61,43 @@ typedef enum MAV_AUTOPILOT
 } MAV_AUTOPILOT;
 #endif
 
+/** @brief  */
+#ifndef HAVE_ENUM_MAV_TYPE
+#define HAVE_ENUM_MAV_TYPE
+typedef enum MAV_TYPE
+{
+   MAV_TYPE_GENERIC=0, /* Generic micro air vehicle. | */
+   MAV_TYPE_FIXED_WING=1, /* Fixed wing aircraft. | */
+   MAV_TYPE_QUADROTOR=2, /* Quadrotor | */
+   MAV_TYPE_COAXIAL=3, /* Coaxial helicopter | */
+   MAV_TYPE_HELICOPTER=4, /* Normal helicopter with tail rotor. | */
+   MAV_TYPE_ANTENNA_TRACKER=5, /* Ground installation | */
+   MAV_TYPE_GCS=6, /* Operator control unit / ground control station | */
+   MAV_TYPE_AIRSHIP=7, /* Airship, controlled | */
+   MAV_TYPE_FREE_BALLOON=8, /* Free balloon, uncontrolled | */
+   MAV_TYPE_ROCKET=9, /* Rocket | */
+   MAV_TYPE_GROUND_ROVER=10, /* Ground rover | */
+   MAV_TYPE_SURFACE_BOAT=11, /* Surface vessel, boat, ship | */
+   MAV_TYPE_SUBMARINE=12, /* Submarine | */
+   MAV_TYPE_HEXAROTOR=13, /* Hexarotor | */
+   MAV_TYPE_OCTOROTOR=14, /* Octorotor | */
+   MAV_TYPE_TRICOPTER=15, /* Tricopter | */
+   MAV_TYPE_FLAPPING_WING=16, /* Flapping wing | */
+   MAV_TYPE_KITE=17, /* Kite | */
+   MAV_TYPE_ONBOARD_CONTROLLER=18, /* Onboard companion controller | */
+   MAV_TYPE_VTOL_DUOROTOR=19, /* Two-rotor VTOL using control surfaces in vertical operation in addition. Tailsitter. | */
+   MAV_TYPE_VTOL_QUADROTOR=20, /* Quad-rotor VTOL using a V-shaped quad config in vertical operation. Tailsitter. | */
+   MAV_TYPE_VTOL_TILTROTOR=21, /* Tiltrotor VTOL | */
+   MAV_TYPE_VTOL_RESERVED2=22, /* VTOL reserved 2 | */
+   MAV_TYPE_VTOL_RESERVED3=23, /* VTOL reserved 3 | */
+   MAV_TYPE_VTOL_RESERVED4=24, /* VTOL reserved 4 | */
+   MAV_TYPE_VTOL_RESERVED5=25, /* VTOL reserved 5 | */
+   MAV_TYPE_GIMBAL=26, /* Onboard gimbal | */
+   MAV_TYPE_ADSB=27, /* Onboard ADSB peripheral | */
+   MAV_TYPE_ENUM_END=28, /*  | */
+} MAV_TYPE;
+#endif
+
 /** @brief These values define the type of firmware release.  These values indicate the first version or release of this type.  For example the first alpha release would be 64, the second would be 65. */
 #ifndef HAVE_ENUM_FIRMWARE_VERSION_TYPE
 #define HAVE_ENUM_FIRMWARE_VERSION_TYPE
@@ -158,6 +195,47 @@ typedef enum MAV_STATE
    MAV_STATE_POWEROFF=7, /* System just initialized its power-down sequence, will shut down now. | */
    MAV_STATE_ENUM_END=8, /*  | */
 } MAV_STATE;
+#endif
+
+/** @brief  */
+#ifndef HAVE_ENUM_MAV_COMPONENT
+#define HAVE_ENUM_MAV_COMPONENT
+typedef enum MAV_COMPONENT
+{
+   MAV_COMP_ID_ALL=0, /*  | */
+   MAV_COMP_ID_CAMERA=100, /*  | */
+   MAV_COMP_ID_SERVO1=140, /*  | */
+   MAV_COMP_ID_SERVO2=141, /*  | */
+   MAV_COMP_ID_SERVO3=142, /*  | */
+   MAV_COMP_ID_SERVO4=143, /*  | */
+   MAV_COMP_ID_SERVO5=144, /*  | */
+   MAV_COMP_ID_SERVO6=145, /*  | */
+   MAV_COMP_ID_SERVO7=146, /*  | */
+   MAV_COMP_ID_SERVO8=147, /*  | */
+   MAV_COMP_ID_SERVO9=148, /*  | */
+   MAV_COMP_ID_SERVO10=149, /*  | */
+   MAV_COMP_ID_SERVO11=150, /*  | */
+   MAV_COMP_ID_SERVO12=151, /*  | */
+   MAV_COMP_ID_SERVO13=152, /*  | */
+   MAV_COMP_ID_SERVO14=153, /*  | */
+   MAV_COMP_ID_GIMBAL=154, /*  | */
+   MAV_COMP_ID_LOG=155, /*  | */
+   MAV_COMP_ID_ADSB=156, /*  | */
+   MAV_COMP_ID_OSD=157, /* On Screen Display (OSD) devices for video links | */
+   MAV_COMP_ID_PERIPHERAL=158, /* Generic autopilot peripheral component ID. Meant for devices that do not implement the parameter sub-protocol | */
+   MAV_COMP_ID_QX1_GIMBAL=159, /*  | */
+   MAV_COMP_ID_MAPPER=180, /*  | */
+   MAV_COMP_ID_MISSIONPLANNER=190, /*  | */
+   MAV_COMP_ID_PATHPLANNER=195, /*  | */
+   MAV_COMP_ID_IMU=200, /*  | */
+   MAV_COMP_ID_IMU_2=201, /*  | */
+   MAV_COMP_ID_IMU_3=202, /*  | */
+   MAV_COMP_ID_GPS=220, /*  | */
+   MAV_COMP_ID_UDP_BRIDGE=240, /*  | */
+   MAV_COMP_ID_UART_BRIDGE=241, /*  | */
+   MAV_COMP_ID_SYSTEM_CONTROL=250, /*  | */
+   MAV_COMPONENT_ENUM_END=251, /*  | */
+} MAV_COMPONENT;
 #endif
 
 /** @brief These encode the sensors whose status is sent as part of the SYS_STATUS message. */

@@ -36,7 +36,7 @@ sudo apt-get install ant protobuf-compiler libeigen3-dev libopencv-dev openjdk-8
 
 Since this project relies on the submodule, so we have to init all the submodules. To clone the repo and init all the submodules, run:
 
-```git clone git@github.com:Wonderful99668/UAV_IBS.git```
+```git clone --recursive git@github.com:Wonderful99668/UAV_IBS.git```
 
 You can also do this separately:
 
@@ -46,4 +46,4 @@ cd UAV_IBS
 git submodule update --init --recursive
 ```
 
-#### 3. Run SITL simulation with JMAVSim**
+#### 3. Run SITL simulation with JMAVSim
