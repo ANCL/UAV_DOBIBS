@@ -3,8 +3,8 @@
 #include <uORB/topics/battery_status.h>
 void BlockTASKController::update()
 {
-        // wait for an image feature, timeout every 200 ms
-        int poll_ret = px4_poll(_fds,(sizeof(_fds) / sizeof(_fds[0])),200);// to check if
+        // wait for an image feature, timeout every 500 ms
+        int poll_ret = px4_poll(_fds,(sizeof(_fds) / sizeof(_fds[0])), 500);// to check if
 
         if (poll_ret <= 0)
         {
