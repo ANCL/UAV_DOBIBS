@@ -5,6 +5,20 @@ Code for the simulation-based paper **'Disturbance Observer-Based Integral Backs
 
 This code is meant for use **SITL**(*Software in the loop*) approach to test the controller in the simulated world known as [jMAVSim](https://github.com/PX4/jMAVSim). It is easier to turn the parameter and test the controller in the simulated world before taking the Quatrotor to the sky. So we decide to release this code to reproduce the paper's result.
 
+
+
+[TOC]
+
+
+
+## Important Files
+
+1. Main module of our backstepping controller: [mc_TASK](./src/modules/mc_TASK)
+
+2. cmake config file which compile the project: [posix_sitl_custom](./cmake/configs/posix.sitl_custom.cmake)
+
+3. jMAVSim configuration for the controller: [simulator constructor](./Tools/jmavsim/src/me/drton/jmavsim/Simulator.java#L430)
+
 ## Usage
 
 ### Install the Toolchain
@@ -47,3 +61,52 @@ git submodule update --init --recursive
 ```
 
 #### 3. Run SITL simulation with JMAVSim
+
+1. After ensuring you follow the steps above to setup the developing environment, the convenience "Make target" will compile the POSIX host build and start the jMAVSim simultaneously:
+
+```make posix_sitl_custom jmavsim```
+
+When successfully build, JMAVSim should be automatically launched and bring up the PX4 shell:
+
+```
+______  __   __    ___ 
+| ___ \ \ \ / /   /   |
+| |_/ /  \ V /   / /| |
+|  __/   /   \  / /_| |
+| |     / /^\ \ \___  |
+\_|     \/   \/     |_/
+
+px4 starting
+...
+INFO [tone_alarm] home_set
+INFO [tone_alarm] neutral
+pxh>
+
+```
+
+After you see the quad sitting in the center of the simulated world, you will be able to start flying once you have a position lock(shortly after the console displays the message: gps init …)
+
+2. Change quad mode. * There are two flying modes in our customized version of PX4: **ANCL1** and **ANCL2**.
+
+* **ANCL1 mode**: This is to take the quad to the hover at center of the world 1 meter high.
+
+* **ANCL2 mode**: This is the mode that the quad uses our Backstepping Controller (e.g.: circle; 8 figure).
+
+For the safety consideration, before you change to the **ANCL2** mode, make sure you first stay on the **ANCL1** mode to make the quad hover at 1 meter:
+
+```
+commander mode ancl1
+commander arm # arm the quad, make the quad hover at 1 meter
+commander mode ancl2 # change the mode to use our controller
+```
+
+## Citing
+
+
+
+
+## Acknowledgement
+
+Thanks [PX4 team](https://px4.io/) for their great work on the open-source autopilot.
+
+If you run into any problems when testing our code, please open the issue directly.
