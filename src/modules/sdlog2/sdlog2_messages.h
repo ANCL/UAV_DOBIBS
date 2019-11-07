@@ -757,9 +757,6 @@ static const struct log_format_s log_formats[] = {
 	LOG_FORMAT(TIME, "Q", "StartTime"),
 	LOG_FORMAT(VER, "NZ", "Arch,FwGit"),
 	LOG_FORMAT(PARM, "Nf", "Name,Value")
-
-	LOG_FORMAT(IASP, "ffffB", "roll,pitch,yaw,thrust,valid"),
-	LOG_FORMAT(VIC, "ffffffffff", "p_x,p_y,p_z,v_x,v_y,v_z,q0,q1,q2,q3")
 };
 
 static const unsigned log_formats_num = sizeof(log_formats) / sizeof(log_formats[0]);
