@@ -5,11 +5,16 @@ Code for the simulation-based paper **'Disturbance Observer-Based Integral Backs
 
 This code is meant for use **SITL**(*Software in the loop*) approach to test the controller in the simulated world known as [jMAVSim](https://github.com/PX4/jMAVSim). It is easier to turn the parameter and test the controller in the simulated world before taking the Quatrotor to the sky. So we decide to release this code to reproduce the paper's result.
 
+## Contents
 
-
-[TOC]
-
-
+  * [Important Files](#important-files)
+  * [Usage](#usage)
+    + [Installation](#installation)
+      - [1.Install the Toolchain](#1install-the-toolchain)
+      - [2. Download the code](#2-download-the-code)
+    + [Run SITL simulation with JMAVSim](#run-sitl-simulation-with-jmavsim)
+  * [Citing](#citing)
+  * [Acknowledgement](#acknowledgement)
 
 ## Important Files
 
@@ -21,11 +26,11 @@ This code is meant for use **SITL**(*Software in the loop*) approach to test the
 
 ## Usage
 
-### Install the Toolchain
+### Installation
 
 **Note:** This code is developed on the **[PX4(1.5.5)](https://github.com/PX4/Firmware/releases/tag/v1.5.5)**, which is difference from the stock version, so we must install the PX4 toolchain manually using the following steps.
 
-#### 1.Preparation
+#### 1.Install the Toolchain
 
 * Install the clean **Ubuntu 16** for your development environment. 
 
@@ -46,7 +51,7 @@ sudo apt-get install python-argparse git-core wget zip python-empy qtcreator cma
 sudo apt-get install ant protobuf-compiler libeigen3-dev libopencv-dev openjdk-8-jdk openjdk-8-jre clang-3.5 lldb-3.5 -y
 ```
 
-#### 2. Installation
+#### 2. Download the code
 
 Since this project relies on the submodule, so we have to init all the submodules. To clone the repo and init all the submodules, run:
 
@@ -60,7 +65,7 @@ cd UAV_IBS
 git submodule update --init --recursive
 ```
 
-#### 3. Run SITL simulation with JMAVSim
+### Run SITL simulation with JMAVSim
 
 1. After ensuring you follow the steps above to setup the developing environment, the convenience "Make target" will compile the POSIX host build and start the jMAVSim simultaneously:
 
@@ -101,7 +106,6 @@ commander mode ancl2 # change the mode to use our controller
 ```
 
 ## Citing
-
 
 
 
