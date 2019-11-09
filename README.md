@@ -65,7 +65,7 @@ git submodule update --init --recursive
 
 ### Running the SITL/jMAVSim Simulation
 
-1. The convenience "Make target" will compile the POSIX target build and start the jMAVSim simultaneously:
+1. In order to compile the PX4 code for SITL and and start jMAVSim:
 
 ```make posix_sitl_custom jmavsim```
 
@@ -89,9 +89,9 @@ pxh>
 
 A separate jMAVSim window should launch which shows the quadrotor in a virtual world. You can begin flying once you have a position lock which is when PXH shell displays `gps init`.
 
-2. Change quad mode. * There are two flying modes in our customized version of PX4: **ANCL1** and **ANCL2**.
+2. Changing the flight mode. * There are two flying modes in our customized version of PX4: **ANCL1** and **ANCL2**.
 
-* **ANCL1 mode**: This is to take the quad to the hover at center of the world 1 meter high.
+* **ANCL1 mode**: This mode makes the quad hover at $x=0,y=0,z=-1$ which is 1 meter above the origin of the world.
 
 * **ANCL2 mode**: This is the mode that the quad uses our Backstepping Controller (e.g.: circle; 8 figure).
 
