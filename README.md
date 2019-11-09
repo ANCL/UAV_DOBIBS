@@ -1,18 +1,18 @@
-# Simulation of a Disturbance Observer-Based Integral Backstepping Controller using PX4+SITL+jMAVSim
+# Simulation of a Disturbance Observer-Based Integral Backstepping Controller with PX4 and SITL/jMAVSim
 
 
 This repo contains the simulation code for the IFAC 2020 conference paper submission **'Disturbance Observer-Based Integral Backstepping Controller for Multirotor UAVs'**. 
 
-The code simulates a disturbance observer-based integral backstepping control for a multirotor UAV running the [PX4 autopilot firmware](https://px4.io/). **SITL**   (*Software in the loop*) is combined with the [jMAVSim](https://github.com/PX4/jMAVSim) simulator. The reason for using SITL simulation is to test controller performance using actual PX4 firmware. This ensures the controller is generally implementable on-board physical autopilots (e.g. Pixhawk 1) and that simulation results are closer to what are observed in flight testing. 
+The code simulates a disturbance observer-based integral backstepping control for a multirotor UAV running the [PX4 autopilot firmware](https://px4.io/). **SITL** (*Software in the loop*) is combined with the [jMAVSim](https://github.com/PX4/jMAVSim) simulator. The reason for using SITL simulation is to test controller performance using actual PX4 firmware. This ensures the controller is implementable on-board physical autopilots (e.g., Pixhawk 1) and that simulation results are closer to what are observed in flight testing. 
 
 ## Contents
 
   * [Important Folders and Files](#important-files)
   * [Usage](#usage)
     + [Installation](#installation)
-      - [1. Install the Toolchain](#1install-the-toolchain)
-      - [2. Download the code](#2-download-the-code)
-    + [Run SITL simulation with JMAVSim](#run-sitl-simulation-with-jmavsim)
+      - [1. Installing the Toolchain](#1install-the-toolchain)
+      - [2. Downloading the Code](#2-download-the-code)
+    + [Running the SITL/jMAVSim Simulation](#run-sitl-simulation-with-jmavsim)
   * [Citing](#citing)
   * [Acknowledgement](#acknowledgement)
 
@@ -87,7 +87,7 @@ pxh>
 
 ```
 
-A separate jMAVSim window should show the quadrotor sitting in the center of the simulated world. You can begin flying once you have a position lock which is when  PXH  shell displays "gps init".
+A separate jMAVSim window should launch which shows the quadrotor in a virtual world. You can begin flying once you have a position lock which is when PXH shell displays `gps init`.
 
 2. Change quad mode. * There are two flying modes in our customized version of PX4: **ANCL1** and **ANCL2**.
 
@@ -103,12 +103,9 @@ commander arm # arm the quad, make the quad hover at 1 meter
 commander mode ancl2 # change the mode to use our controller
 ```
 
-If you run into any problems using the code, please open an [issue](https://help.github.com/en/github/managing-your-work-on-github/creating-an-issue).
+If you run into any problems using the code please open an [issue](https://help.github.com/en/github/managing-your-work-on-github/creating-an-issue).
 
 ## Citing
-
-
-
 
 ## Acknowledgement
 Thanks to the [PX4 team](https://px4.io/) for their open-source autopilot on which this code is based.
