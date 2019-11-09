@@ -1,9 +1,9 @@
 # Backstepping Controller
 
 
-Code for the simulation-based paper **'Disturbance Observer-Based Integral Backstepping Controller for Multirotor UAVs'**.
+Code for the IFAC 2020 conference paper submission **'Disturbance Observer-Based Integral Backstepping Controller for Multirotor UAVs'**. 
 
-This code is meant for use **SITL**(*Software in the loop*) approach to test the controller in the simulated world known as [jMAVSim](https://github.com/PX4/jMAVSim). It is easier to turn the parameter and test the controller in the simulated world before taking the Quatrotor to the sky. So we decide to release this code to reproduce the paper's result.
+This code is simulates a disturbance observer-based integral backstepping control for a multirotor UAV using **SITL**(*Software in the loop*) and the [jMAVSim](https://github.com/PX4/jMAVSim) simulator. A main reason for using SITL is so that the actual PX4 firmware is tested. This ensures simulation results are closer to what is actually implemented in flight testing. 
 
 ## Contents
 
@@ -55,12 +55,12 @@ sudo apt-get install ant protobuf-compiler libeigen3-dev libopencv-dev openjdk-8
 
 Since this project relies on the submodule, so we have to init all the submodules. To clone the repo and init all the submodules, run:
 
-```git clone --recursive git@github.com:Wonderful99668/UAV_IBS.git```
+```git clone --recursive git@github.com:ANCL/UAV_IBS.git```
 
 You can also do this separately:
 
 ```
-git clone git@github.com:Wonderful99668/UAV_IBS.git
+git clone git@github.com:ANCL/UAV_IBS.git
 cd UAV_IBS
 git submodule update --init --recursive
 ```
