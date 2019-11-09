@@ -91,7 +91,7 @@ A separate jMAVSim window should launch which shows the quadrotor in a virtual w
 
 2. Changing the flight mode. * There are two flying modes in our customized version of PX4: **ANCL1** and **ANCL2**.
 
-* **ANCL1 mode**: This mode makes the quad hover at $x=0,y=0,z=-1$ which is 1 meter above the origin of the world.
+* **ANCL1 mode**: This mode makes the quad hover at &x=0, &y=0, &z=-1 which is 1 meter above the origin of the world.
 
 * **ANCL2 mode**: This is the mode that the quad uses our Backstepping Controller (e.g.: circle; 8 figure).
 
