@@ -1,4 +1,4 @@
-# Backstepping Controller
+# Simulating a Disturbance Observer-Based Integral Backstepping Controller using PX4+SITL+jMAVSim
 
 
 Code for the IFAC 2020 conference paper submission **'Disturbance Observer-Based Integral Backstepping Controller for Multirotor UAVs'**. 
@@ -7,7 +7,7 @@ This code is simulates a disturbance observer-based integral backstepping contro
 
 ## Contents
 
-  * [Important Files](#important-files)
+  * [Important Folders and Files](#important-files)
   * [Usage](#usage)
     + [Installation](#installation)
       - [1.Install the Toolchain](#1install-the-toolchain)
@@ -16,11 +16,11 @@ This code is simulates a disturbance observer-based integral backstepping contro
   * [Citing](#citing)
   * [Acknowledgement](#acknowledgement)
 
-## Important Files
+## Important Folders and Files
 
-1. Main module of our backstepping controller: [mc_TASK](./src/modules/mc_TASK)
+1. Folder containing the module which implements the backstepping controller: [mc_TASK](./src/modules/mc_TASK)
 
-2. cmake config file which compile the project: [posix_sitl_custom](./cmake/configs/posix.sitl_custom.cmake)
+2. cmake config file for compiling the project: [posix_sitl_custom](./cmake/configs/posix.sitl_custom.cmake)
 
 3. jMAVSim configuration for the controller: [simulator constructor](./Tools/jmavsim/src/me/drton/jmavsim/Simulator.java#L430)
 
@@ -28,7 +28,7 @@ This code is simulates a disturbance observer-based integral backstepping contro
 
 ### Installation
 
-**Note:** This code is developed on the **[PX4(1.5.5)](https://github.com/PX4/Firmware/releases/tag/v1.5.5)**, which is difference from the stock version, so we must install the PX4 toolchain manually using the following steps.
+**Note:** This code is developed on the **[PX4 (v1.5.5, Jan 25, 2017)](https://github.com/PX4/Firmware/releases/tag/v1.5.5)**, which is difference from the stock version, so we must install the PX4 toolchain manually using the following steps.
 
 #### 1.Install the Toolchain
 
@@ -71,7 +71,8 @@ git submodule update --init --recursive
 
 ```make posix_sitl_custom jmavsim```
 
-When successfully build, JMAVSim should be automatically launched and bring up the PX4 shell:
+When successfully build, JMAVSim should be automatically launched and bring up the 
+shell:
 
 ```
 ______  __   __    ___ 
@@ -111,6 +112,6 @@ commander mode ancl2 # change the mode to use our controller
 
 ## Acknowledgement
 
-Thanks [PX4 team](https://px4.io/) for their great work on the open-source autopilot.
+Thanks to the [PX4 team](https://px4.io/) for their open-source autopilot on which this code is based.
 
 If you run into any problems when testing our code, please open the issue directly.
