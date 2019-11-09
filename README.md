@@ -28,15 +28,13 @@ This code is simulates a disturbance observer-based integral backstepping contro
 
 ### Installation
 
-**Note:** This code is developed on the **[PX4 (v1.5.5, Jan 25, 2017)](https://github.com/PX4/Firmware/releases/tag/v1.5.5)**, which is difference from the stock version, so we must install the PX4 toolchain manually using the following steps.
+**Note:** This code is developed on the **[PX4 (v1.5.5, Jan 25, 2017)](https://github.com/PX4/Firmware/releases/tag/v1.5.5)**, which is behind the current version of the firmware. Hence, the PX4 toolchain should be installed manually using the following steps. Note that this installation will only allow SITL simulation and not compilation for an actual autopilot such as Pixhawk 1. 
 
-#### 1.Install the Toolchain
+#### 1.Installing the Toolchain
 
-* Install the clean **Ubuntu 16** for your development environment. 
+* Perform a clean install of **Ubuntu 16.04** for your development environment. **Do not use** a more recent version of Ubuntu (e.g., 18.04) as it will not work. **Do not use** a VMWARE Workstation VM or Virtualbox VM to run your Ubuntu as it will not support jMAVSim.
 
-(**Do not use** a higher version of Ubuntu (e.g., 18.04) as it will not work. **Do not use a VMWARE** VM or Virtualbox VM to run your Ubuntu as it will not support jMAVSim.)
-
-* Ensure the user is added to the dialout group to have access to the usb ports. To add user to the dialout group you can use the following command and log out then back in for changes to take effect.
+* Ensure the user is added to the dialout group to have access to the usb ports. To add a user to the dialout group you can use the following command and log out then back in for changes to take effect.
 
 ```
 sudo usermod -a -G dialout $USER
@@ -51,28 +49,27 @@ sudo apt-get install python-argparse git-core wget zip python-empy qtcreator cma
 sudo apt-get install ant protobuf-compiler libeigen3-dev libopencv-dev openjdk-8-jdk openjdk-8-jre clang-3.5 lldb-3.5 -y
 ```
 
-#### 2. Download the code
+#### 2. Downloading the Code
 
-Since this project relies on the submodule, so we have to init all the submodules. To clone the repo and init all the submodules, run:
+The PX4 firmware depends on a number of other projects which are included as submodules. To clone the repo using HTTPS and init all the submodules, run:
 
-```git clone --recursive git@github.com:ANCL/UAV_IBS.git```
+```git clone --recursive https://github.com/ANCL/UAV_IBS.git```
 
-You can also do this separately:
+Equivalently, you can do this in two steps with:
 
 ```
-git clone git@github.com:ANCL/UAV_IBS.git
+git clone https://github.com/ANCL/UAV_IBS.git
 cd UAV_IBS
 git submodule update --init --recursive
 ```
 
-### Run SITL simulation with JMAVSim
+### Running the SITL/jMAVSim Simulation
 
-1. After ensuring you follow the steps above to setup the developing environment, the convenience "Make target" will compile the POSIX host build and start the jMAVSim simultaneously:
+1. The convenience "Make target" will compile the POSIX target build and start the jMAVSim simultaneously:
 
 ```make posix_sitl_custom jmavsim```
 
-When successfully build, JMAVSim should be automatically launched and bring up the 
-shell:
+When the build is successful, JMAVSim and the PXH shel are launched. In the terminal you should see
 
 ```
 ______  __   __    ___ 
@@ -90,7 +87,7 @@ pxh>
 
 ```
 
-After you see the quad sitting in the center of the simulated world, you will be able to start flying once you have a position lock(shortly after the console displays the message: gps init …)
+A separate jMAVSim window should show the quadrotor sitting in the center of the simulated world. You can begin flying once you have a position lock which is when  PXH  shell displays "gps init".
 
 2. Change quad mode. * There are two flying modes in our customized version of PX4: **ANCL1** and **ANCL2**.
 
