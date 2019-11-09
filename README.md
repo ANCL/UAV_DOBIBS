@@ -10,7 +10,7 @@ The code simulates a disturbance observer-based integral backstepping control fo
   * [Important Folders and Files](#important-files)
   * [Usage](#usage)
     + [Installation](#installation)
-      - [1.Install the Toolchain](#1install-the-toolchain)
+      - [1. Install the Toolchain](#1install-the-toolchain)
       - [2. Download the code](#2-download-the-code)
     + [Run SITL simulation with JMAVSim](#run-sitl-simulation-with-jmavsim)
   * [Citing](#citing)
@@ -30,7 +30,7 @@ The code simulates a disturbance observer-based integral backstepping control fo
 
 **Note:** This code is developed on the **[PX4 (v1.5.5, Jan 25, 2017)](https://github.com/PX4/Firmware/releases/tag/v1.5.5)**, which is behind the current version of the firmware. Hence, the PX4 toolchain should be installed manually using the following steps. Note that this installation will only allow SITL simulation and not compilation for an actual autopilot such as Pixhawk 1. 
 
-#### 1.Installing the Toolchain
+#### 1. Installing the Toolchain
 
 * Perform a clean install of **Ubuntu 16.04** for your development environment. **Do not use** a more recent version of Ubuntu (e.g., 18.04) as it will not work. **Do not use** a VMWARE Workstation VM or Virtualbox VM to run your Ubuntu as it will not support jMAVSim.
 
@@ -103,12 +103,13 @@ commander arm # arm the quad, make the quad hover at 1 meter
 commander mode ancl2 # change the mode to use our controller
 ```
 
+If you run into any problems using the code, please open an [issue](https://help.github.com/en/github/managing-your-work-on-github/creating-an-issue).
+
 ## Citing
 
 
 
-## Acknowledgement
 
+## Acknowledgement
 Thanks to the [PX4 team](https://px4.io/) for their open-source autopilot on which this code is based.
 
-If you run into any problems when testing our code, please open the issue directly.
