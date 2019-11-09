@@ -3,7 +3,7 @@
 
 Code for the IFAC 2020 conference paper submission **'Disturbance Observer-Based Integral Backstepping Controller for Multirotor UAVs'**. 
 
-This code is simulates a disturbance observer-based integral backstepping control for a multirotor UAV using **SITL**(*Software in the loop*) and the [jMAVSim](https://github.com/PX4/jMAVSim) simulator. A main reason for using SITL is so that the actual PX4 firmware is tested. This ensures simulation results are closer to what is actually implemented in flight testing. 
+This code is simulates a disturbance observer-based integral backstepping control for a multirotor UAV running the PX4 firmware. **SITL**   (*Software in the loop*) is combined with the [jMAVSim](https://github.com/PX4/jMAVSim) simulator. A main reason for using SITL is so that the actual PX4 firmware is tested. This ensures the controller is generally implementable on-board and that simulation results are closer to what are observed in flight testing. 
 
 ## Contents
 
