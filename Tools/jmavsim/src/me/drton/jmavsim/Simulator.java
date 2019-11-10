@@ -444,7 +444,7 @@ public class Simulator implements Runnable {
      * @param rotorsOffset   rotors positions offset from gravity center
      * @param showGui        false if the GUI has been disabled
      */
-        // rotorThrust=7.75 is derived from amir's backstep paper
+        // set rotorThrust=7.75, construct the simulator described in the paper
         AbstractMulticopter vehicle = new Quadcopter(world, DEFAULT_VEHICLE_MODEL, "x", "default",
                                                      0.33 / 2, 7.75, 0.05, 0.005, gc, SHOW_GUI);
         Matrix3d I = new Matrix3d();
@@ -455,14 +455,14 @@ public class Simulator implements Runnable {
         I.m22 = 0.009;  // Z
         end*/
 
-        /* modified inertia value according to amir's backstep paper*/
+        /* inertia parameters used in the paper*/
         I.m00 = 0.03;  // X
         I.m11 = 0.03;  // Y
         I.m22 = 0.05;  // Z
 
         vehicle.setMomentOfInertia(I);
 
-        /*default mass = 0.8; modified mass value according to amir's backstep paper*/
+        /*mass value used in the paper*/
         vehicle.setMass(1.6);
         
         vehicle.setDragMove(0.01);

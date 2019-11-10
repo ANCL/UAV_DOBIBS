@@ -158,7 +158,8 @@ void BlockTASKController::update()
                                T=T_d-t;
                            }
 
-                           //Circle
+                           //Circle traj;
+                           // uncomment the code below to enable Circle trajectory
 
                           /* matrix::Vector<float, 3>  pd;
                            pd(0)=A*sinf(2*pi*t/T);
@@ -186,6 +187,7 @@ void BlockTASKController::update()
                            ddddpd(2)=0;*/
 
                         //  Fig 8
+                        // uncomment the code below to enable Fig 8 trajectory
                             matrix::Vector<float, 3>  pd;
                             pd(0)=A*sinf(2*pi*t/T);
                             pd(1)=B*sinf(4*pi*t/T)/4;
@@ -212,6 +214,7 @@ void BlockTASKController::update()
                             ddddpd(2)=0;
 
                            //Setpoint
+                           // uncomment the code below to enable setpoint 
                      /*      matrix::Vector<float, 3>  pd;
                            pd(0)=0.0f;
                            pd(1)=0.0f;
@@ -262,8 +265,9 @@ void BlockTASKController::update()
 // ----------------------------- Disturbance Observer--------------------------------------------------
                              if (_status.get().nav_state == vehicle_status_s::NAVIGATION_STATE_ANCL2)
                              {
-                                obs=1;}
-                             else{obs=0;}// turn on the dis observer when switched to ANCL2
+                                obs=1;
+                            }else{
+                                    obs=0;}// turn on the dis observer when switched to ANCL2
 
                           /* matrix::Vector<float, 3>  dis=-(m*g*n3-m*g*R*n3);
                            if(get_counter()==23){
