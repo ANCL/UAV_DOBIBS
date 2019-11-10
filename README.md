@@ -7,12 +7,12 @@ The code simulates a disturbance observer-based integral backstepping control fo
 
 ## Contents
 
-  * [Important Folders and Files](#important-files)
+* [Important Folders and Files](#important-folders-and-files)
   * [Usage](#usage)
     + [Installation](#installation)
-      - [1. Installing the Toolchain](#1install-the-toolchain)
-      - [2. Downloading the Code](#2-download-the-code)
-    + [Running the SITL/jMAVSim Simulation](#run-sitl-simulation-with-jmavsim)
+      - [1. Installing the Toolchain](#1-installing-the-toolchain)
+      - [2. Downloading the Code](#2-downloading-the-code)
+    + [Running the SITL/jMAVSim Simulation](#running-the-sitl/jmavsim-simulation)
   * [Citing](#citing)
   * [Acknowledgement](#acknowledgement)
 
