@@ -135,7 +135,7 @@ void BlockTASKController::update()
                         switch_traj == 1; Circle;
                         switch_traj == 2; setpoint 
                         */
-                        int switch_traj = 0
+                        //int switch_traj = 0;
 
                         if (_status.get().nav_state == vehicle_status_s::NAVIGATION_STATE_ANCL2 && traj==0){
                             traj=1;
@@ -164,7 +164,7 @@ void BlockTASKController::update()
                             T=T_d-t;
                         }
                         
-                        if (switch_traj == 0){
+                        //if (switch_traj == 0){
                             //  Fig 8
                             matrix::Vector<float, 3>  pd;
                             pd(0)=A*sinf(2*pi*t/T);
@@ -190,65 +190,65 @@ void BlockTASKController::update()
                             ddddpd(0)=(16*A*(pi*pi*pi*pi)*sinf((2*pi*t)/T))/(T*T*T*T);
                             ddddpd(1)=(64*B*(pi*pi*pi*pi)*sinf((4*pi*t)/T))/(T*T*T*T);
                             ddddpd(2)=0;
-                        }else if (switch_traj == 1){
-                           // Circle traj
-                           matrix::Vector<float, 3>  pd;
-                           pd(0)=A*sinf(2*pi*t/T);
-                           pd(1)=B*cosf(2*pi*t/T);
-                           pd(2)=-0.9f;
+                        // }else if (switch_traj == 1){
+                        //    // Circle traj
+                        //    matrix::Vector<float, 3>  pd;
+                        //    pd(0)=A*sinf(2*pi*t/T);
+                        //    pd(1)=B*cosf(2*pi*t/T);
+                        //    pd(2)=-0.9f;
 
-                           matrix::Vector<float, 3>  dpd;
-                           dpd(0)=2*pi*A*cosf(2*pi*t/T)/T;
-                           dpd(1)=-2*pi*B*sinf(2*pi*t/T)/T;
-                           dpd(2)=0;
+                        //    matrix::Vector<float, 3>  dpd;
+                        //    dpd(0)=2*pi*A*cosf(2*pi*t/T)/T;
+                        //    dpd(1)=-2*pi*B*sinf(2*pi*t/T)/T;
+                        //    dpd(2)=0;
 
-                           matrix::Vector<float, 3>  ddpd;
-                           ddpd(0)=-4*(pi*pi)*A*sinf(2*pi*t/T)/(T*T);
-                           ddpd(1)=-4*(pi*pi)*B*cosf(2*pi*t/T)/(T*T);
-                           ddpd(2)=0;
+                        //    matrix::Vector<float, 3>  ddpd;
+                        //    ddpd(0)=-4*(pi*pi)*A*sinf(2*pi*t/T)/(T*T);
+                        //    ddpd(1)=-4*(pi*pi)*B*cosf(2*pi*t/T)/(T*T);
+                        //    ddpd(2)=0;
 
-                           matrix::Vector<float, 3>  dddpd;
-                           dddpd(0)=-8*A*(pi*pi*pi)*cosf(2*pi*t/T)/(T*T*T);
-                           dddpd(1)=8*A*(pi*pi*pi)*sinf(2*pi*t/T)/(T*T*T);
-                           dddpd(2)=0;
+                        //    matrix::Vector<float, 3>  dddpd;
+                        //    dddpd(0)=-8*A*(pi*pi*pi)*cosf(2*pi*t/T)/(T*T*T);
+                        //    dddpd(1)=8*A*(pi*pi*pi)*sinf(2*pi*t/T)/(T*T*T);
+                        //    dddpd(2)=0;
 
-                           matrix::Vector<float, 3>  ddddpd;
-                           ddddpd(0)=16*A*(pi*pi*pi*pi)*sinf(2*pi*t/T)/(T*T*T*T);
-                           ddddpd(1)=16*A*(pi*pi*pi*pi)*cosf(2*pi*t/T)/(T*T*T*T);
-                           ddddpd(2)=0;
-                        }else{
-                           //Setpoint 
-                           matrix::Vector<float, 3>  pd;
-                           pd(0)=0.0f;
-                           pd(1)=0.0f;
-                           pd(2)=-0.85f;
+                        //    matrix::Vector<float, 3>  ddddpd;
+                        //    ddddpd(0)=16*A*(pi*pi*pi*pi)*sinf(2*pi*t/T)/(T*T*T*T);
+                        //    ddddpd(1)=16*A*(pi*pi*pi*pi)*cosf(2*pi*t/T)/(T*T*T*T);
+                        //    ddddpd(2)=0;
+                        // }else{
+                        //    //Setpoint 
+                        //    matrix::Vector<float, 3>  pd;
+                        //    pd(0)=0.0f;
+                        //    pd(1)=0.0f;
+                        //    pd(2)=-0.85f;
 
-                           if (_status.get().nav_state == vehicle_status_s::NAVIGATION_STATE_ANCL2)
-                           {
-                               pd(0)=1.0f;
-                               pd(1)=0.0f;
-                               pd(2)=-0.85f;}
+                        //    if (_status.get().nav_state == vehicle_status_s::NAVIGATION_STATE_ANCL2)
+                        //    {
+                        //        pd(0)=1.0f;
+                        //        pd(1)=0.0f;
+                        //        pd(2)=-0.85f;}
 
-                           matrix::Vector<float, 3>  dpd;
-                           dpd(0)=0;
-                           dpd(1)=0;
-                           dpd(2)=0;
+                        //    matrix::Vector<float, 3>  dpd;
+                        //    dpd(0)=0;
+                        //    dpd(1)=0;
+                        //    dpd(2)=0;
 
-                           matrix::Vector<float, 3>  ddpd;
-                           ddpd(0)=0;
-                           ddpd(1)=0;
-                           ddpd(2)=0;
+                        //    matrix::Vector<float, 3>  ddpd;
+                        //    ddpd(0)=0;
+                        //    ddpd(1)=0;
+                        //    ddpd(2)=0;
 
-                           matrix::Vector<float, 3>  dddpd;
-                           dddpd(0)=0;
-                           dddpd(1)=0;
-                           dddpd(2)=0;
+                        //    matrix::Vector<float, 3>  dddpd;
+                        //    dddpd(0)=0;
+                        //    dddpd(1)=0;
+                        //    dddpd(2)=0;
 
-                           matrix::Vector<float, 3>  ddddpd;
-                           ddddpd(0)=0;
-                           ddddpd(1)=0;
-                           ddddpd(2)=0;
-                        }
+                        //    matrix::Vector<float, 3>  ddddpd;
+                        //    ddddpd(0)=0;
+                        //    ddddpd(1)=0;
+                        //    ddddpd(2)=0;
+                        // }
 
                            // Integral Backstepping  Gains
                            float k1 = 4;
