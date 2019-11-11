@@ -1,8 +1,6 @@
 /****************************************************************************
  *
- *   Copyright (c) 2014 ANCL Development Team. All rights reserved.
- *   Author: @Hui Xie <xie1@ualberta.ca>
- *
+ * Copyright (c) 2014 ANCL Development Team. All rights reserved.
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -150,13 +148,11 @@ int mc_TASK_main(int argc, char *argv[])
 						 4048,
 						 mc_TASK_thread_main,
 						 (argv) ? (char *const *)&argv[2] : (char *const *)NULL);
-		//exit(0);
         return 0;
 	}
 
 	if (!strcmp(argv[1], "stop")) {
 		TASK::thread_should_exit = true;
-		//exit(0);
         return 0;
 	}
 
@@ -168,12 +164,10 @@ int mc_TASK_main(int argc, char *argv[])
 			warnx("not started");
 		}
 
-		//exit(0);
         return 0;
 	}
 
 	usage("unrecognized command");
-	//exit(1);
     return 1;
 }
 

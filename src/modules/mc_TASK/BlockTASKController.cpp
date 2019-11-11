@@ -40,154 +40,132 @@ void BlockTASKController::update()
                         updateSubscriptions();
                         
                         //initialization
-                           float m = 1.6;
-                           float g = 9.81;
-                           float J1 = 0.005;//0.005;
-                           float J2 = 0.0045;
-                           float J3 = 0.08;
+                        float m = 1.6;
+                        float g = 9.81;
+                        float J1 = 0.005;//0.005;
+                        float J2 = 0.0045;
+                        float J3 = 0.08;
 
 
-                           //variable state definition
-                           matrix::Vector<float, 3>  p;
-                           p(0)=_pos.get().x;
-                           p(1)=_pos.get().y;
-                           p(2)=_pos.get().z;
+                        //variable state definition
+                        matrix::Vector<float, 3>  p;
+                        p(0)=_pos.get().x;
+                        p(1)=_pos.get().y;
+                        p(2)=_pos.get().z;
 
-                           matrix::Vector<float, 3>  v;
+                        matrix::Vector<float, 3>  v;
 
-                           v(0) = _pos.get().vx;
-                           v(1) = _pos.get().vy;
-                           v(2) = _pos.get().vz;
+                        v(0) = _pos.get().vx;
+                        v(1) = _pos.get().vy;
+                        v(2) = _pos.get().vz;
 
-                           matrix::Eulerf euler = matrix::Quatf(_att.get().q);// converting quaternion to Euler angles
-                           float phi =euler.phi();
-                           float theta = euler.theta();
-                           float psi = euler.psi();
+                        matrix::Eulerf euler = matrix::Quatf(_att.get().q);// converting quaternion to Euler angles
+                        float phi =euler.phi();
+                        float theta = euler.theta();
+                        float psi = euler.psi();
 
-                           matrix::Vector<float, 3>  w;
-                           w(0) = _att.get().rollspeed;
-                           w(1) = _att.get().pitchspeed;
-                           w(2) = _att.get().yawspeed;
+                        matrix::Vector<float, 3>  w;
+                        w(0) = _att.get().rollspeed;
+                        w(1) = _att.get().pitchspeed;
+                        w(2) = _att.get().yawspeed;
 
-                          // matrix::Dcm<float> R_att(_att.get().q);// not working!
+                        // matrix::Dcm<float> R_att(_att.get().q);// not working!
 
-                           matrix::Matrix<float, 3, 3>  R;
+                        matrix::Matrix<float, 3, 3>  R;
 
-                           R(0,0)=cos(psi)*cos(theta);
-                           R(0,1)=-sin(psi)*cos(phi)+cos(psi)*sin(theta)*sin(phi);
-                           R(0,2)=sin(phi)*sin(psi)+cos(phi)*sin(theta)*cos(psi);
+                        R(0,0)=cos(psi)*cos(theta);
+                        R(0,1)=-sin(psi)*cos(phi)+cos(psi)*sin(theta)*sin(phi);
+                        R(0,2)=sin(phi)*sin(psi)+cos(phi)*sin(theta)*cos(psi);
 
-                           R(1,0)=sin(psi)*cos(theta);
-                           R(1,1)=cos(psi)*cos(phi)+sin(psi)*sin(theta)*sin(phi);
-                           R(1,2)=-sin(phi)*cos(psi)+cos(phi)*sin(theta)*sin(psi);
+                        R(1,0)=sin(psi)*cos(theta);
+                        R(1,1)=cos(psi)*cos(phi)+sin(psi)*sin(theta)*sin(phi);
+                        R(1,2)=-sin(phi)*cos(psi)+cos(phi)*sin(theta)*sin(psi);
 
-                           R(2,0)=-sin(theta);
-                           R(2,1)=cos(theta)*sin(phi);
-                           R(2,2)=cos(theta)*cos(phi);
+                        R(2,0)=-sin(theta);
+                        R(2,1)=cos(theta)*sin(phi);
+                        R(2,2)=cos(theta)*cos(phi);
 
-                           float quad_input[4];
+                        float quad_input[4];
 
-                           //vector and matrix definition
-                           matrix::Matrix<float, 3, 3>  Ie3;
-                           Ie3(0,0)=1;
-                           Ie3(0,1)=0;
-                           Ie3(0,2)=0;
+                        //vector and matrix definition
+                        matrix::Matrix<float, 3, 3>  Ie3;
+                        Ie3(0,0)=1;
+                        Ie3(0,1)=0;
+                        Ie3(0,2)=0;
 
-                           Ie3(1,0)=0;
-                           Ie3(1,1)=1;
-                           Ie3(1,2)=0;
+                        Ie3(1,0)=0;
+                        Ie3(1,1)=1;
+                        Ie3(1,2)=0;
 
-                           Ie3(2,0)=0;
-                           Ie3(2,1)=0;
-                           Ie3(2,2)=0;
+                        Ie3(2,0)=0;
+                        Ie3(2,1)=0;
+                        Ie3(2,2)=0;
 
-                           matrix::Matrix<float, 3, 3>  Sw;
-                           Sw(0,0)=0;
-                           Sw(0,1)=-w(2);
-                           Sw(0,2)=w(1);
+                        matrix::Matrix<float, 3, 3>  Sw;
+                        Sw(0,0)=0;
+                        Sw(0,1)=-w(2);
+                        Sw(0,2)=w(1);
 
-                           Sw(1,0)=w(2);
-                           Sw(1,1)=0;
-                           Sw(1,2)=-w(0);
+                        Sw(1,0)=w(2);
+                        Sw(1,1)=0;
+                        Sw(1,2)=-w(0);
 
-                           Sw(2,0)=-w(1);
-                           Sw(2,1)=w(0);
-                           Sw(2,2)=0;
+                        Sw(2,0)=-w(1);
+                        Sw(2,1)=w(0);
+                        Sw(2,2)=0;
 
-                           matrix::Vector<float, 3>  n1;
-                           n1(0)=1;
-                           n1(1)=0;
-                           n1(2)=0;
+                        matrix::Vector<float, 3>  n1;
+                        n1(0)=1;
+                        n1(1)=0;
+                        n1(2)=0;
 
-                           matrix::Vector<float, 3>  n2;
-                           n2(0)=0;
-                           n2(1)=1;
-                           n2(2)=0;
+                        matrix::Vector<float, 3>  n2;
+                        n2(0)=0;
+                        n2(1)=1;
+                        n2(2)=0;
 
-                           matrix::Vector<float, 3>  n3;
-                           n3(0)=0;
-                           n3(1)=0;
-                           n3(2)=1;
+                        matrix::Vector<float, 3>  n3;
+                        n3(0)=0;
+                        n3(1)=0;
+                        n3(2)=1;
 
-                           // desired trajectory
+                        // desired trajectory
+                        /*
+                        switch_traj == 0: Fig 8;
+                        switch_traj == 1; Circle;
+                        switch_traj == 2; setpoint 
+                        */
+                        int switch_traj = 0
 
-                          if (_status.get().nav_state == vehicle_status_s::NAVIGATION_STATE_ANCL2 && traj==0){
-                               traj=1;
+                        if (_status.get().nav_state == vehicle_status_s::NAVIGATION_STATE_ANCL2 && traj==0){
+                            traj=1;
                             traj_t=t1;
                             switch_time=t1;
 
-                           }
+                        }
 
-                           if (_status.get().nav_state == vehicle_status_s::NAVIGATION_STATE_ANCL1 && traj==1){
-                               switch_time=t1;
-                           }
+                        if (_status.get().nav_state == vehicle_status_s::NAVIGATION_STATE_ANCL1 && traj==1){
+                            switch_time=t1;
+                        }
 
 
-                          float T_d=20.0;
-                           if (_status.get().nav_state == vehicle_status_s::NAVIGATION_STATE_ANCL1){
-                               traj=0;
-                               T=T_d;
-                           }
+                        float T_d=20.0;
+                        if (_status.get().nav_state == vehicle_status_s::NAVIGATION_STATE_ANCL1){
+                            traj=0;
+                            T=T_d;
+                        }
 
-                           float t=(t1-traj_t)/1000000.0f;
-                           float A=1.50*traj;
-                           float B=3.00*traj;
-                           float pi=3.14;
+                        float t=(t1-traj_t)/1000000.0f;
+                        float A=1.50*traj;
+                        float B=3.00*traj;
+                        float pi=3.14;
 
-                           if (traj==1 && T>12.0f){
-                               T=T_d-t;
-                           }
-
-                           //Circle traj;
-                           // uncomment the code below to enable Circle trajectory
-
-                          /* matrix::Vector<float, 3>  pd;
-                           pd(0)=A*sinf(2*pi*t/T);
-                           pd(1)=B*cosf(2*pi*t/T);
-                           pd(2)=-0.9f;
-
-                           matrix::Vector<float, 3>  dpd;
-                           dpd(0)=2*pi*A*cosf(2*pi*t/T)/T;
-                           dpd(1)=-2*pi*B*sinf(2*pi*t/T)/T;
-                           dpd(2)=0;
-
-                           matrix::Vector<float, 3>  ddpd;
-                           ddpd(0)=-4*(pi*pi)*A*sinf(2*pi*t/T)/(T*T);
-                           ddpd(1)=-4*(pi*pi)*B*cosf(2*pi*t/T)/(T*T);
-                           ddpd(2)=0;
-
-                           matrix::Vector<float, 3>  dddpd;
-                           dddpd(0)=-8*A*(pi*pi*pi)*cosf(2*pi*t/T)/(T*T*T);
-                           dddpd(1)=8*A*(pi*pi*pi)*sinf(2*pi*t/T)/(T*T*T);
-                           dddpd(2)=0;
-
-                           matrix::Vector<float, 3>  ddddpd;
-                           ddddpd(0)=16*A*(pi*pi*pi*pi)*sinf(2*pi*t/T)/(T*T*T*T);
-                           ddddpd(1)=16*A*(pi*pi*pi*pi)*cosf(2*pi*t/T)/(T*T*T*T);
-                           ddddpd(2)=0;*/
-
-                        //  Fig 8
-                        // uncomment the code below to enable Fig 8 trajectory
+                        if (traj==1 && T>12.0f){
+                            T=T_d-t;
+                        }
+                        
+                        if (switch_traj == 0){
+                            //  Fig 8
                             matrix::Vector<float, 3>  pd;
                             pd(0)=A*sinf(2*pi*t/T);
                             pd(1)=B*sinf(4*pi*t/T)/4;
@@ -212,10 +190,35 @@ void BlockTASKController::update()
                             ddddpd(0)=(16*A*(pi*pi*pi*pi)*sinf((2*pi*t)/T))/(T*T*T*T);
                             ddddpd(1)=(64*B*(pi*pi*pi*pi)*sinf((4*pi*t)/T))/(T*T*T*T);
                             ddddpd(2)=0;
+                        }else if (switch_traj == 1){
+                           // Circle traj
+                           matrix::Vector<float, 3>  pd;
+                           pd(0)=A*sinf(2*pi*t/T);
+                           pd(1)=B*cosf(2*pi*t/T);
+                           pd(2)=-0.9f;
 
-                           //Setpoint
-                           // uncomment the code below to enable setpoint 
-                     /*      matrix::Vector<float, 3>  pd;
+                           matrix::Vector<float, 3>  dpd;
+                           dpd(0)=2*pi*A*cosf(2*pi*t/T)/T;
+                           dpd(1)=-2*pi*B*sinf(2*pi*t/T)/T;
+                           dpd(2)=0;
+
+                           matrix::Vector<float, 3>  ddpd;
+                           ddpd(0)=-4*(pi*pi)*A*sinf(2*pi*t/T)/(T*T);
+                           ddpd(1)=-4*(pi*pi)*B*cosf(2*pi*t/T)/(T*T);
+                           ddpd(2)=0;
+
+                           matrix::Vector<float, 3>  dddpd;
+                           dddpd(0)=-8*A*(pi*pi*pi)*cosf(2*pi*t/T)/(T*T*T);
+                           dddpd(1)=8*A*(pi*pi*pi)*sinf(2*pi*t/T)/(T*T*T);
+                           dddpd(2)=0;
+
+                           matrix::Vector<float, 3>  ddddpd;
+                           ddddpd(0)=16*A*(pi*pi*pi*pi)*sinf(2*pi*t/T)/(T*T*T*T);
+                           ddddpd(1)=16*A*(pi*pi*pi*pi)*cosf(2*pi*t/T)/(T*T*T*T);
+                           ddddpd(2)=0;
+                        }else{
+                           //Setpoint 
+                           matrix::Vector<float, 3>  pd;
                            pd(0)=0.0f;
                            pd(1)=0.0f;
                            pd(2)=-0.85f;
@@ -244,7 +247,8 @@ void BlockTASKController::update()
                            matrix::Vector<float, 3>  ddddpd;
                            ddddpd(0)=0;
                            ddddpd(1)=0;
-                           ddddpd(2)=0;*/
+                           ddddpd(2)=0;
+                        }
 
                            // Integral Backstepping  Gains
                            float k1 = 4;
@@ -267,43 +271,44 @@ void BlockTASKController::update()
                              {
                                 obs=1;
                             }else{
-                                    obs=0;}// turn on the dis observer when switched to ANCL2
+                                    obs=0; // turn on the dis observer when switched to ANCL2
+                                 }
 
                           /* matrix::Vector<float, 3>  dis=-(m*g*n3-m*g*R*n3);
                            if(get_counter()==23){
-                                  PX4_INFO("counter =0");
+                                PX4_INFO("counter =0");
 
-                                   z_df_0=dis(0);
-                                   z_df_1=dis(1);
-                                   z_df_2=dis(2);
+                                z_df_0=dis(0);
+                                z_df_1=dis(1);
+                                z_df_2=dis(2);
                              }*/ // initial value for the dis estimates
 
 
                            //
-                           matrix::Vector<float, 3>  z_df;
-                           z_df(0)=  z_df_0;
-                           z_df(1)=  z_df_1;
-                           z_df(2)=  z_df_2;
-                           matrix::Vector<float, 3>  df_hat1=z_df+obs*k_df*m*v; // DOB equation
+                        matrix::Vector<float, 3>  z_df;
+                        z_df(0)=  z_df_0;
+                        z_df(1)=  z_df_1;
+                        z_df(2)=  z_df_2;
+                        matrix::Vector<float, 3>  df_hat1=z_df+obs*k_df*m*v; // DOB equation
 
-                           //Saturation of df_hat
-                           if (df_hat1(0) > 2.0f){
-                           df_hat1(0) = 2.0f;
-                           } else if (df_hat1(0) < -2.0f) {
-                                   df_hat1(0) =-2.0f;
-                           }
+                        //Saturation of df_hat
+                        if (df_hat1(0) > 2.0f){
+                        df_hat1(0) = 2.0f;
+                        } else if (df_hat1(0) < -2.0f) {
+                                df_hat1(0) =-2.0f;
+                        }
 
-                           if (df_hat1(1) > 2.0f){
+                        if (df_hat1(1) > 2.0f){
                            df_hat1(1) = 2.0f;
-                           } else if (df_hat1(1) < -2.0f) {
-                                   df_hat1(1) =-2.0f;
-                           }
+                        } else if (df_hat1(1) < -2.0f) {
+                                df_hat1(1) =-2.0f;
+                        }
 
-                          if (df_hat1(2) > 7.0f){
+                        if (df_hat1(2) > 7.0f){
                            df_hat1(2) = 7.0f;
-                           } else if (df_hat1(2) < -7.0f) {
-                                   df_hat1(2) =-7.0f;
-                           }
+                        } else if (df_hat1(2) < -7.0f) {
+                                df_hat1(2) =-7.0f;
+                        }
 //----------------------------------------- Controller -----------------------------------
 
                           float u;

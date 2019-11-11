@@ -71,15 +71,8 @@ private:
     float intw0=0;
     float intw1=0;
     float intw2=0;
-    //float intu=0;
-   // int res=0;
     int traj=0;
-    //float res0=0;
-    //  float res1=0;
-    // float res2=0;
-   //float resu;
     float switch_time=0;
-    //float test=0;
 
     matrix::Vector<float, 3>  prev_rates;
     matrix::Vector<float, 3>  prev_rates2;
