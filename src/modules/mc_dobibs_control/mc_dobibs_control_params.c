@@ -40,7 +40,7 @@
 /**
  * Flag for choosing trajectory 
  *
- * 0 for FIg 8; 1 for Circle; 2 for Setpoint.
+ * 0 for Fig 8; 1 for Circle; 2 for Setpoint.
  * 
  * @unit norm
  * @min 0
@@ -55,9 +55,9 @@ PARAM_DEFINE_INT32(MC_DOBIBS_TRAJ, 0);
 /**
 *  Integration parameter
 */
-PARAM_DEFINE_FLOAT(TASK_I_PARAM,1.0f);
+PARAM_DEFINE_FLOAT(TASK_I_PARAM, 1.0f);
 
-PARAM_DEFINE_FLOAT(TASK_I_PARAM_MAX,2.0f);
+PARAM_DEFINE_FLOAT(TASK_I_PARAM_MAX, 2.0f);
 
 
 

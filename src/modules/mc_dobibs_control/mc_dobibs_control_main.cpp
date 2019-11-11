@@ -32,6 +32,7 @@
 
 /**
  * @file mc_dobibs_control_main.cpp
+ * @author zhijun <zxue2@ualberta.ca>
  * Multicopter Backstepping controller.
  *
  */

@@ -1393,7 +1393,7 @@ void MulticopterPositionControl::control_ancl(float dt) {
 			t_circle=0;
 		}
 
-        // Uncomment to use position control and move in a circle
+        /*// Uncomment to use position control and move in a circle
         //start move in circle
         if (t_circle<T0) { //Straight line to circle
 			_pos_sp(0) = _params.circle_r*t_circle/T0;
@@ -1410,22 +1410,20 @@ void MulticopterPositionControl::control_ancl(float dt) {
 		}
 
 		_run_alt_control = true;
-        t_circle+=dt;  //end move in circle
+        t_circle+=dt;  //end move in circle*/
 
+		// start mc_dobibs_control
         _pos_sp(0) = 0.0f;
         _pos_sp(1) = 0.0f;
         _pos_sp(2) = -0.85f;
            
         _run_alt_control = true;
-		//warnx("(%3.3f,%3.3f,%3.3f) (%3.3f,%3.3f,%3.3f)",(double)_pos_sp(0),(double)_pos_sp(1),(double)_pos_sp(2),(double)_vel_sp(0),(double)_vel_sp(1),(double)_vel_sp(2));
         } else {
 		//Should not be possible stay where we are
 		_reset_pos_sp = true;
 		_reset_alt_sp = true;
 		warnx("PROBLEM!");
 	}
-
-	//warnx("%3.3f:(%1.3f,%1.3f,%1.3f)",(double)t_circle,(double)_pos_sp(0),(double)_pos_sp(1),(double)_pos_sp(2));
 
 }
 
