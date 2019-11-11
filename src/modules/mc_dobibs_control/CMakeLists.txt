@@ -31,15 +31,14 @@
 #
 ############################################################################
 px4_add_module(
-	MODULE modules__mc_TASK
-	MAIN mc_TASK
+	MODULE modules__mc_dobibs_control
+	MAIN mc_dobibs_control
 	STACK_MAIN 1000
 	STACK_MAX 1300
 	SRCS
-		mc_TASK_main.cpp
+		mc_dobibs_control_main.cpp
 		BlockTASKController.cpp
 		
 	DEPENDS
 		platforms__common
-	)
-# vim: set noet ft=cmake fenc=utf-8 ff=unix : 
+	) 

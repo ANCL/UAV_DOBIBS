@@ -61,7 +61,7 @@ local_position_estimator start
 mc_pos_control start
 mc_att_control start
 
-mc_TASK start # start the mc_TASK during boot process
+mc_dobibs_control start # start the mc_dobibs_control during boot process
 
 mixer load /dev/pwm_output0 ROMFS/px4fmu_common/mixers/quad_w.main.mix
 mavlink start -u 14556 -r 4000000

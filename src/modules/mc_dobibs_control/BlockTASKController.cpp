@@ -1,4 +1,3 @@
-
 #include "BlockTASKController.hpp"
 #include <uORB/topics/battery_status.h>
 void BlockTASKController::update()
@@ -130,12 +129,6 @@ void BlockTASKController::update()
                         n3(2)=1;
 
                         // desired trajectory
-                        /*
-                        switch_traj == 0: Fig 8;
-                        switch_traj == 1; Circle;
-                        switch_traj == 2; setpoint 
-                        */
-                        int switch_traj = 0
 
                         if (_status.get().nav_state == vehicle_status_s::NAVIGATION_STATE_ANCL2 && traj==0){
                             traj=1;
@@ -164,87 +157,92 @@ void BlockTASKController::update()
                             T=T_d-t;
                         }
                         
-                        if (switch_traj == 0){
+                        matrix::Vector<float, 3>  pd;
+                        matrix::Vector<float, 3>  dpd;
+                        matrix::Vector<float, 3>  ddpd;
+                        matrix::Vector<float, 3>  dddpd;
+                        matrix::Vector<float, 3>  ddddpd;
+                        if (_switch_traj == 0){
                             //  Fig 8
-                            matrix::Vector<float, 3>  pd;
+                            
                             pd(0)=A*sinf(2*pi*t/T);
                             pd(1)=B*sinf(4*pi*t/T)/4;
                             pd(2)=-0.85f;
 
-                            matrix::Vector<float, 3>  dpd;
                             dpd(0)=(2*A*pi*cosf((2*pi*t)/T))/T;
                             dpd(1)=(B*pi*cosf((4*pi*t)/T))/T;
                             dpd(2)=0;
 
-                            matrix::Vector<float, 3>  ddpd;
+                            
                             ddpd(0)=-(4*A*(pi*pi)*sinf((2*pi*t)/T))/(T*T);
                             ddpd(1)=-(4*B*(pi*pi)*sinf((4*pi*t)/T))/(T*T);
                             ddpd(2)=0;
 
-                            matrix::Vector<float, 3>  dddpd;
+                            
                             dddpd(0)=-(8*A*(pi*pi*pi)*cosf((2*pi*t)/T))/(T*T*T);
                             dddpd(1)=-(16*B*(pi*pi*pi)*cosf((4*pi*t)/T))/(T*T*T);
                             dddpd(2)=0;
 
-                            matrix::Vector<float, 3>  ddddpd;
+                            
                             ddddpd(0)=(16*A*(pi*pi*pi*pi)*sinf((2*pi*t)/T))/(T*T*T*T);
                             ddddpd(1)=(64*B*(pi*pi*pi*pi)*sinf((4*pi*t)/T))/(T*T*T*T);
                             ddddpd(2)=0;
-                        }else if (switch_traj == 1){
+                        }else if (_switch_traj == 1){
                            // Circle traj
-                           matrix::Vector<float, 3>  pd;
+                           //matrix::Vector<float, 3>  pd;
                            pd(0)=A*sinf(2*pi*t/T);
                            pd(1)=B*cosf(2*pi*t/T);
                            pd(2)=-0.9f;
 
-                           matrix::Vector<float, 3>  dpd;
+                           //matrix::Vector<float, 3>  dpd;
                            dpd(0)=2*pi*A*cosf(2*pi*t/T)/T;
                            dpd(1)=-2*pi*B*sinf(2*pi*t/T)/T;
                            dpd(2)=0;
 
-                           matrix::Vector<float, 3>  ddpd;
+                           //matrix::Vector<float, 3>  ddpd;
                            ddpd(0)=-4*(pi*pi)*A*sinf(2*pi*t/T)/(T*T);
                            ddpd(1)=-4*(pi*pi)*B*cosf(2*pi*t/T)/(T*T);
                            ddpd(2)=0;
 
-                           matrix::Vector<float, 3>  dddpd;
+                           //matrix::Vector<float, 3>  dddpd;
                            dddpd(0)=-8*A*(pi*pi*pi)*cosf(2*pi*t/T)/(T*T*T);
                            dddpd(1)=8*A*(pi*pi*pi)*sinf(2*pi*t/T)/(T*T*T);
                            dddpd(2)=0;
 
-                           matrix::Vector<float, 3>  ddddpd;
+                           //matrix::Vector<float, 3>  ddddpd;
                            ddddpd(0)=16*A*(pi*pi*pi*pi)*sinf(2*pi*t/T)/(T*T*T*T);
                            ddddpd(1)=16*A*(pi*pi*pi*pi)*cosf(2*pi*t/T)/(T*T*T*T);
                            ddddpd(2)=0;
-                        }else{
+                        }else if (_switch_traj == 2){
                            //Setpoint 
-                           matrix::Vector<float, 3>  pd;
+                           //matrix::Vector<float, 3>  pd;
                            pd(0)=0.0f;
                            pd(1)=0.0f;
                            pd(2)=-0.85f;
+                        
 
                            if (_status.get().nav_state == vehicle_status_s::NAVIGATION_STATE_ANCL2)
                            {
-                               pd(0)=1.0f;
-                               pd(1)=0.0f;
-                               pd(2)=-0.85f;}
+                           pd(0)=1.0f;
+                           pd(1)=0.0f;
+                           pd(2)=-0.85f;}
 
-                           matrix::Vector<float, 3>  dpd;
+                           //matrix::Vector<float, 3>  dpd;
                            dpd(0)=0;
                            dpd(1)=0;
                            dpd(2)=0;
 
-                           matrix::Vector<float, 3>  ddpd;
+                           //matrix::Vector<float, 3>  ddpd;
                            ddpd(0)=0;
                            ddpd(1)=0;
                            ddpd(2)=0;
 
-                           matrix::Vector<float, 3>  dddpd;
+                           //matrix::Vector<float, 3>  dddpd;
                            dddpd(0)=0;
                            dddpd(1)=0;
                            dddpd(2)=0;
 
-                           matrix::Vector<float, 3>  ddddpd;
+                           //matrix::Vector<float, 3>  ddddpd;
                            ddddpd(0)=0;
                            ddddpd(1)=0;
                            ddddpd(2)=0;
@@ -259,9 +257,9 @@ void BlockTASKController::update()
 
                            // Backstepping Gains
 //                          float k1 =5;
-//                           float k2 = 5;
-//                           float k3 = 5;
-//                           float k4 = 5;
+//                          float k2 = 5;
+//                          float k3 = 5;
+//                          float k4 = 5;
 
                            //Observer gain
                            float k_df=0.5;

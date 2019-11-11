@@ -31,8 +31,8 @@
  ****************************************************************************/
 
 /**
- * @file mc_TASK_main.cpp
- * Multicopter TASK controller.
+ * @file mc_dobibs_control_main.cpp
+ * Multicopter Backstepping controller.
  *
  */
 
@@ -62,12 +62,12 @@ namespace TASK
 /**
  * Deamon management function.
  */
-extern "C" __EXPORT int mc_TASK_main(int argc, char *argv[]);
+extern "C" __EXPORT int mc_dobibs_control_main(int argc, char *argv[]);
 
 /**
  * Mainloop of deamon.
  */
-int mc_TASK_thread_main(int argc, char *argv[]);
+int mc_dobibs_control_thread_main(int argc, char *argv[]);
 
 /**
  * Print the correct usage.
@@ -81,7 +81,7 @@ usage(const char *reason)
 		fprintf(stderr, "%s\n", reason);
 	}
 
-	fprintf(stderr, "usage: mc_TASK {start|stop|status} [-p <additional params>]\n\n");
+	fprintf(stderr, "usage: mc_dobibs_control {start|stop|status} [-p <additional params>]\n\n");
     return 0;
 }
 
@@ -104,7 +104,7 @@ int INFO5()
                 struct vehicle_secondary_control_setpoint_s data;
 		        memset(&data,0,sizeof(data));
                 orb_copy(ORB_ID(vehicle_secondary_control_setpoint), sub, &data);
-                PX4_INFO("MC_TASK OUTPUT");
+                PX4_INFO("mc_dobibs_control OUTPUT");
                 PX4_INFO("Timestamp: (%" PRIu64 ")",data.timestamp);
                 PX4_INFO("Roll: (%.5f)",(double)data.control[0] );
                 PX4_INFO("Pitch: (%.5f)",(double)data.control[1] );
@@ -123,7 +123,7 @@ int INFO5()
 return OK;
 }
 
-int mc_TASK_main(int argc, char *argv[])
+int mc_dobibs_control_main(int argc, char *argv[])
 {
 
 	if (argc < 2) {
@@ -141,12 +141,12 @@ int mc_TASK_main(int argc, char *argv[])
 		}
 
 		TASK::thread_should_exit = false;
-                PX4_INFO("MC_TASK START");
-		TASK::deamon_task = px4_task_spawn_cmd("mc_TASK",
+                PX4_INFO("mc_dobibs_control START");
+		TASK::deamon_task = px4_task_spawn_cmd("mc_dobibs_control",
 						 SCHED_DEFAULT,
 						 SCHED_PRIORITY_ATTITUDE_CONTROL,
 						 4048,
-						 mc_TASK_thread_main,
+						 mc_dobibs_control_thread_main,
 						 (argv) ? (char *const *)&argv[2] : (char *const *)NULL);
         return 0;
 	}
@@ -171,7 +171,7 @@ int mc_TASK_main(int argc, char *argv[])
     return 1;
 }
 
-int mc_TASK_thread_main(int argc, char *argv[])
+int mc_dobibs_control_thread_main(int argc, char *argv[])
 {
 
 	warnx("starting");

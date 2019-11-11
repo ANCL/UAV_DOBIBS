@@ -61,7 +61,7 @@ set(config_module_list
 #	modules/vtol_att_control
 	modules/mc_att_control
 	modules/mc_pos_control
-	modules/mc_TASK
+	modules/mc_dobibs_control
 
 	#
 	# Logging
@@ -98,16 +98,6 @@ set(config_module_list
 	lib/runway_takeoff
 	lib/tailsitter_recovery
 	lib/terrain_estimation
-
-	#
-	# Example code
-	#
-	examples/px4_simple_app
-	examples/mc_att_control_multiplatform
-	examples/mc_pos_control_multiplatform
-	examples/ekf_att_pos_estimator
-	examples/attitude_estimator_ekf
-	examples/fixedwing_control
 
 	#
 	# Testing

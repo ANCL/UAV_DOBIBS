@@ -1393,37 +1393,6 @@ void MulticopterPositionControl::control_ancl(float dt) {
 			t_circle=0;
 		}
 
-         // Uncomment following to move along the line
-
-		/*
-                //start line following code
-		if( _local_pos.x > _params.circle_r ){
-		  _pitch_forward = false;
-		}
-		if( _local_pos.x <-_params.circle_r){
-		  _pitch_forward = true;
-		}
-	        if (_pitch_forward==true){
-		  _pos_sp(0) = _pos(0)+dt*_params.circle_w;
-		  _pos_sp(1) = 0;
-		  _pos_sp(2) = -0.8f;
-		  _vel_sp(0) = (_pos_sp(0) - _pos(0)) * _params.pos_p(0)+_params.circle_w;
-		  //_vel_sp(1) = (_pos_sp(1) - _pos(1)) * _params.pos_p(1);
-		  _run_pos_control = false;
-		}
-		if(_pitch_forward==false){
-		  _pos_sp(0)= _pos(0)-dt*_params.circle_w;
-		  _pos_sp(1) = 0;
-		  _pos_sp(2) = -0.8f;
-		  _vel_sp(0) = (_pos_sp(0) - _pos(0)) * _params.pos_p(0)-_params.circle_w;
-		  //_vel_sp(1) = (_pos_sp(1) - _pos(1)) * _params.pos_p(1); 
-		  _run_pos_control = false;
-                }
-
-        //end line following code */
-
-
-
         // Uncomment to use position control and move in a circle
         //start move in circle
         if (t_circle<T0) { //Straight line to circle
@@ -1443,25 +1412,11 @@ void MulticopterPositionControl::control_ancl(float dt) {
 		_run_alt_control = true;
         t_circle+=dt;  //end move in circle
 
-		
-        //Uncomment following to do IBVS and change IBVS flag params
-
-        /*//start ibvs
-        _pos_sp(0) = 0;
-		_pos_sp(1) = 0;
-		_pos_sp(2) = -1.0f;
-        _run_pos_control = true; 
-        //end ibvs*/
-
-        //Uncomment following to do mc_TASK
         _pos_sp(0) = 0.0f;
         _pos_sp(1) = 0.0f;
         _pos_sp(2) = -0.85f;
-        //end mc_TASK
-        
+           
         _run_alt_control = true;
-	
-
 		//warnx("(%3.3f,%3.3f,%3.3f) (%3.3f,%3.3f,%3.3f)",(double)_pos_sp(0),(double)_pos_sp(1),(double)_pos_sp(2),(double)_vel_sp(0),(double)_vel_sp(1),(double)_vel_sp(2));
         } else {
 		//Should not be possible stay where we are

@@ -27,15 +27,17 @@ public:
         _int_er_0(this,"I_PARAM"),
         _int_er_1(this,"I_PARAM"),
         _int_er_2(this,"I_PARAM"),
-      //  integ_test(this,"I_PARAM"),
         _fds(),
         _t(0),
+        _switch_traj(0),
 	    prev_rates(),
 	    prev_rates2(),
         rate_int()
     {
         _fds[0].fd = _pos.getHandle();
         _fds[0].events = POLLIN;
+        switch_traj = param_find("MC_DOBIBS_TRAJ");
+        param_get(switch_traj, &_switch_traj);
     }
     void update();
 private:
@@ -52,7 +54,11 @@ private:
     BlockIntegral _int_er_2;
    // BlockIntegral integ_test;
     px4_pollfd_struct_t _fds[1];
-    uint64_t _t;;
+    uint64_t _t;
+
+    // params
+    param_t switch_traj;
+
     float obs=0;
     float thrust_input=10;
     //float u_dot;
@@ -74,7 +80,8 @@ private:
     int traj=0;
     float switch_time=0;
 
+    int _switch_traj;
     matrix::Vector<float, 3>  prev_rates;
     matrix::Vector<float, 3>  prev_rates2;
-    matrix::Vector<float, 3>  rate_int;
+    matrix::Vector<float, 3>  rate_int;    
 };
