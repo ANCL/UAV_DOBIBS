@@ -101,6 +101,12 @@ commander mode ancl2 # change the mode to use backstepping control
 
 ## Debug/Customize Controller
 
+If you run into any problems using the code, please open an [issue](https://help.github.com/en/github/managing-your-work-on-github/creating-an-issue), or you can email one of us:
+
+* Alan F.Lynch <alan.lynch@ualberta.ca>
+* Zhijun Xue <zxue2@ualberta.ca>
+* Amir Moeini <moeini@ualberta.ca>
+
 ### 1. Debug the controller
 
 There might be cases where you are developing/debug your controller and want to build without launching the simulator. You can start JMAVSim and PX4 separately:
@@ -114,9 +120,9 @@ This allows a faster testing cycle (restarting jMAVSim takes significantly more 
 
 ### 2. Change trajectory
 
-**Beckstepping Controller**'s default reference trajectory is "**figure 8**"; If you want to change the trajectory, you can go to [mc_TASK/BlockTASKController.cpp](./src/modules/mc_TASK/BlockTASKController.cpp#L132), and then set your desired trajectory(e.g. circle)
+**Beckstepping Controller**'s default reference trajectory is "**figure 8**". 
 
-If you run into any problems using the code, please open an [issue](https://help.github.com/en/github/managing-your-work-on-github/creating-an-issue).
+If you want to change the trajectory, you can go to [mc_TASK/BlockTASKController.cpp](./src/modules/mc_TASK/BlockTASKController.cpp#L138), and then change the parameter: ```switch_traj```to set your desired trajectory(e.g. circle, setpoint)
 
 ## Citing
 
