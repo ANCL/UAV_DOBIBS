@@ -1,5 +1,6 @@
 #include "BlockDOBIBSController.hpp"
 #include <uORB/topics/battery_status.h>
+
 void BlockDOBIBSController::update()
 {
         // wait for an image feature, timeout every 500 ms
