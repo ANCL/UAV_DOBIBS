@@ -317,7 +317,7 @@ class SourceParser(object):
         for group in self.GetParamGroups():
             for param in group.GetParams():
                 name  = param.GetName()
-                if len(name) > 16:
+                if len(name) > 30:
                     sys.stderr.write("Parameter Name {0} is too long (Limit is 16)\n".format(name))
                     return False
                 board = param.GetFieldValue("board")
