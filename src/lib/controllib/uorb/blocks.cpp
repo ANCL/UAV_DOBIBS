@@ -148,7 +148,7 @@ BlockANCLLoop::~BlockANCLLoop() {};
 
 
 
-BlockTASKLoop::BlockTASKLoop(SuperBlock *parent, const char *name):SuperBlock(parent,name),
+BlockDOBIBSLoop::BlockDOBIBSLoop(SuperBlock *parent, const char *name):SuperBlock(parent,name),
         // subscriptions
 		
 		//_vel_sp_LIN(ORB_ID(vehicle_global_velocity_setpoint), 20, 0, &getSubscriptions()),
@@ -164,5 +164,5 @@ BlockTASKLoop::BlockTASKLoop(SuperBlock *parent, const char *name):SuperBlock(pa
         //_actuators(ORB_ID(actuator_controls),-1, &getPublications())
 {}
 
-BlockTASKLoop::~BlockTASKLoop() {};
+BlockDOBIBSLoop::~BlockDOBIBSLoop() {};
 }// namespace control
