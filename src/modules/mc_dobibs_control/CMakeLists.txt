@@ -37,7 +37,7 @@ px4_add_module(
 	STACK_MAX 1300
 	SRCS
 		mc_dobibs_control_main.cpp
-		BlockTASKController.cpp
+		BlockDOBIBSController.cpp
 		
 	DEPENDS
 		platforms__common
