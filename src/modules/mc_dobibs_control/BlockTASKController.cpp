@@ -216,13 +216,6 @@ void BlockTASKController::update()
                            pd(0)=0.0f;
                            pd(1)=0.0f;
                            pd(2)=-0.85f;
-                        
-
-                           if (_status.get().nav_state == vehicle_status_s::NAVIGATION_STATE_ANCL2)
-                        {
-                           pd(0)=1.0f;
-                           pd(1)=0.0f;
-                           pd(2)=-0.85f;}
 
                            dpd(0)=0;
                            dpd(1)=0;
