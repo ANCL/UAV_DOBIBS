@@ -1,6 +1,7 @@
 #pragma once
 
 #include <px4_posix.h>
+#include <px4_defines.h>
 #include <controllib/uorb/blocks.hpp>
 #include <math.h>
 #include <vector>
@@ -11,11 +12,11 @@ using namespace std;
 
 using namespace control;
 
-class BlockTASKController : public control::BlockTASKLoop
+class BlockDOBIBSController : public control::BlockDOBIBSLoop
 {
 public:
-    BlockTASKController() :
-        BlockTASKLoop(NULL,"TASK"),
+    BlockDOBIBSController() :
+        BlockDOBIBSLoop(NULL,"DOBIBS"),
         _iop(this,"I_PARAM"),
         _u_int(this,"I_PARAM"),
         _iw0(this,"I_PARAM"),
@@ -40,6 +41,8 @@ public:
         param_get(switch_traj, &_switch_traj);
     }
     void update();
+    int parameters_update();
+
 private:
     BlockIntegral _iop;
     BlockIntegral _u_int;

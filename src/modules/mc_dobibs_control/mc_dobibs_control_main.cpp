@@ -49,15 +49,15 @@
 #include <drivers/drv_hrt.h>
 #include <math.h>
 
-#include "BlockTASKController.hpp"
+#include "BlockDOBIBSController.hpp"
 
 int INFO5();
-namespace TASK
+namespace DOBIBS
 {
 	static bool thread_should_exit = false;
 	static bool thread_running = false;
 	static int deamon_task;
-	static BlockTASKController *control;
+	static BlockDOBIBSController *control;
 }
 
 /**
@@ -111,11 +111,6 @@ int INFO5()
                 PX4_INFO("Pitch: (%.5f)",(double)data.control[1] );
                 PX4_INFO("Yaw: (%.5f)",(double)data.control[2] );
                 PX4_INFO("Thrust: (%.5f)",(double)data.control[3] );
-                //if(data.valid){
-                 //   PX4_INFO("Valid: TRUE");
-                //} else {
-                //    PX4_INFO("Valid: FALSE");
-                //}
 	} else {
 		PX4_INFO("Could not subscribe to vehicle_attitude_setpoint topic");
 		return 1;
@@ -133,7 +128,7 @@ int mc_dobibs_control_main(int argc, char *argv[])
 
 	if (!strcmp(argv[1], "start")) {
 
-		if (TASK::thread_running) {
+		if (DOBIBS::thread_running) {
             /* this is not an error */
 			warnx("already running");
 			/*have to use return instead of exit*/
@@ -141,9 +136,9 @@ int mc_dobibs_control_main(int argc, char *argv[])
             return 0;
 		}
 
-		TASK::thread_should_exit = false;
+		DOBIBS::thread_should_exit = false;
                 PX4_INFO("mc_dobibs_control START");
-		TASK::deamon_task = px4_task_spawn_cmd("mc_dobibs_control",
+		DOBIBS::deamon_task = px4_task_spawn_cmd("mc_dobibs_control",
 						 SCHED_DEFAULT,
 						 SCHED_PRIORITY_ATTITUDE_CONTROL,
 						 4048,
@@ -153,12 +148,12 @@ int mc_dobibs_control_main(int argc, char *argv[])
 	}
 
 	if (!strcmp(argv[1], "stop")) {
-		TASK::thread_should_exit = true;
+		DOBIBS::thread_should_exit = true;
         return 0;
 	}
 
 	if (!strcmp(argv[1], "status")) {
-		if (TASK::thread_running) {
+		if (DOBIBS::thread_running) {
 			warnx("is running");
 			INFO5();
 		} else {
@@ -177,23 +172,23 @@ int mc_dobibs_control_thread_main(int argc, char *argv[])
 
 	warnx("starting");
 
-	TASK::control = new BlockTASKController;
+	DOBIBS::control = new BlockDOBIBSController;
 
-	if (TASK::control == nullptr) {
+	if (DOBIBS::control == nullptr) {
 		warnx("alloc failed");
 		return 1;
 	}
 
-	TASK::thread_running = true;
+	DOBIBS::thread_running = true;
 
-	while (!TASK::thread_should_exit) {
-		TASK::control->update();
+	while (!DOBIBS::thread_should_exit) {
+		DOBIBS::control->update();
 	}
 
 	warnx("exiting.");
-	delete TASK::control;
-	TASK::control = nullptr;
-	TASK::thread_running = false;
+	delete DOBIBS::control;
+	DOBIBS::control = nullptr;
+	DOBIBS::thread_running = false;
 
 	return 0;
 }

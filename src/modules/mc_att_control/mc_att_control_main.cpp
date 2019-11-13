@@ -186,7 +186,7 @@ private:
 
 	math::Matrix<3, 3>  _I;				/**< identity matrix */
 
-        int _con;
+    int _con;
 
 	struct {
 		param_t roll_p;
@@ -353,7 +353,7 @@ MulticopterAttitudeControl::MulticopterAttitudeControl() :
 	_manual_control_sp_sub(-1),
 	_armed_sub(-1),
 	_vehicle_status_sub(-1),
-        _secondary_control_sp_sub(-1),
+    _secondary_control_sp_sub(-1),
 
 	/* publications */
 	_v_rates_sp_pub(nullptr),
@@ -1131,7 +1131,7 @@ MulticopterAttitudeControl::task_main()
 
 				}
 
-				//printf("Z=(%.3f)(%.3f)(%.3f)\n",(double)_manual_control_sp.z,(double)_thrust_sp,(double)_actuators.control[3]);
+
 
 				/* publish controller status */
 				if (_controller_status_pub != nullptr) {

@@ -1,6 +1,6 @@
 #include "BlockDOBIBSController.hpp"
 #include <uORB/topics/battery_status.h>
-void BlockTASKController::update()
+void BlockDOBIBSController::update()
 {
         // wait for an image feature, timeout every 500 ms
         int poll_ret = px4_poll(_fds,(sizeof(_fds) / sizeof(_fds[0])), 500);// to check if

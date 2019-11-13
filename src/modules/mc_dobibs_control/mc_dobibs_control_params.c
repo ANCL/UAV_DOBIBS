@@ -34,7 +34,7 @@
 /**
  * @file mc_dobibs_control_params.c
  * @author zhijun <zxue2@ualberta.ca>
- * Multicopter TASK controller parameters.
+ * Multicopter DOBIBS controller parameters.
  */
 
 /**
@@ -55,9 +55,9 @@ PARAM_DEFINE_INT32(MC_DOBIBS_TRAJ, 0);
 /**
 *  Integration parameter
 */
-PARAM_DEFINE_FLOAT(TASK_I_PARAM, 1.0f);
+PARAM_DEFINE_FLOAT(DOBIBS_I_PARAM, 1.0f);
 
-PARAM_DEFINE_FLOAT(TASK_I_PARAM_MAX, 2.0f);
+PARAM_DEFINE_FLOAT(DOBIBS_I_PARAM_MAX, 2.0f);
 
 
 
