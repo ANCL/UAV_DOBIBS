@@ -61,7 +61,7 @@ namespace TASK
 }
 
 /**
- * Deamon management function.
+ * Daemon management function.
  */
 extern "C" __EXPORT int mc_dobibs_control_main(int argc, char *argv[]);
 
@@ -87,7 +87,7 @@ usage(const char *reason)
 }
 
 /**
- * The deamon app only briefly exists to start
+ * The daemon app only briefly exists to start
  * the background job. The stack size assigned in the
  * Makefile does only apply to this management task.
  *
@@ -117,7 +117,7 @@ int INFO5()
                 //    PX4_INFO("Valid: FALSE");
                 //}
 	} else {
-		PX4_INFO("Could not subscribe to vehicle_attitude_setpoint topic");
+		PX4_INFO("Could not subscribe to vehicle_secondary_control_setpoint topic");
 		return 1;
         }
         sub = orb_unsubscribe(sub);
@@ -129,6 +129,7 @@ int mc_dobibs_control_main(int argc, char *argv[])
 
 	if (argc < 2) {
 		usage("missing command");
+		return 1;
 	}
 
 	if (!strcmp(argv[1], "start")) {
