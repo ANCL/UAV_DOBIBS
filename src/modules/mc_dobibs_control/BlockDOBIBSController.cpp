@@ -1,8 +1,19 @@
 #include "BlockDOBIBSController.hpp"
 #include <uORB/topics/battery_status.h>
 
-void BlockDOBIBSController::update()
-{
+int BlockDOBIBSController::parameters_update(){
+        param_get(param_find("MC_DOBIBS_TRAJ"), &_switch_traj);
+        param_get(param_find("DOBIBS_CG_K1"), &k1);
+        param_get(param_find("DOBIBS_CG_K2"), &k2);
+        param_get(param_find("DOBIBS_CG_K3"), &k3);
+        param_get(param_find("DOBIBS_CG_K4"), &k4);
+        param_get(param_find("DOBIBS_CG_K5"), &k5);
+        param_get(param_find("DOBIBS_DOG_K"), &k_df);
+        return OK;
+}
+
+void BlockDOBIBSController::update(){
+        parameters_update();
         // wait for an image feature, timeout every 500 ms
         int poll_ret = px4_poll(_fds,(sizeof(_fds) / sizeof(_fds[0])), 500);// to check if
 
@@ -131,14 +142,14 @@ void BlockDOBIBSController::update()
 
                         // desired trajectory
 
-                        if (_status.get().nav_state == vehicle_status_s::NAVIGATION_STATE_ANCL2 && traj==0){
+                        if (_status.get().nav_state == vehicle_status_s::NAVIGATION_STATE_ANCL2 && traj == 0){
                             traj=1;
                             traj_t=t1;
                             switch_time=t1;
 
                         }
 
-                        if (_status.get().nav_state == vehicle_status_s::NAVIGATION_STATE_ANCL1 && traj==1){
+                        if (_status.get().nav_state == vehicle_status_s::NAVIGATION_STATE_ANCL1 && traj == 1){
                             switch_time=t1;
                         }
 
@@ -158,11 +169,6 @@ void BlockDOBIBSController::update()
                             T=T_d-t;
                         }
                         
-                        matrix::Vector<float, 3>  pd;
-                        matrix::Vector<float, 3>  dpd;
-                        matrix::Vector<float, 3>  ddpd;
-                        matrix::Vector<float, 3>  dddpd;
-                        matrix::Vector<float, 3>  ddddpd;
 
                         if (_switch_traj == 0){
                             //  Fig 8
@@ -235,29 +241,13 @@ void BlockDOBIBSController::update()
                            ddddpd(2)=0;
                         }
 
-                           // Integral Backstepping  Gains
-                           float k1 = 4;
-                           float k2 = 4;
-                           float k3 = 4;
-                           float k4 = 4;
-                           float k5 = 4;
-
-                           // Backstepping Gains
-//                          float k1 = 5;
-//                          float k2 = 5;
-//                          float k3 = 5;
-//                          float k4 = 5;
-
-                           //Observer gain
-                           float k_df=0.5;
-
 // ----------------------------- Disturbance Observer--------------------------------------------------
-                             if (_status.get().nav_state == vehicle_status_s::NAVIGATION_STATE_ANCL2)
-                             {
+                        if (_status.get().nav_state == vehicle_status_s::NAVIGATION_STATE_ANCL2)
+                        {
                                 obs=1;
-                            }else{
-                                    obs=0; // turn on the dis observer when switched to ANCL2
-                                 }
+                        }else{
+                                obs=0; // turn on the dis observer when switched to ANCL2
+                        }
 
                           /* matrix::Vector<float, 3>  dis=-(m*g*n3-m*g*R*n3);
                            if(get_counter()==23){
@@ -267,8 +257,6 @@ void BlockDOBIBSController::update()
                                 z_df_1=dis(1);
                                 z_df_2=dis(2);
                              }*/ // initial value for the dis estimates
-
-
                         
                         matrix::Vector<float, 3>  z_df;
                         z_df(0)=  z_df_0;
@@ -305,69 +293,69 @@ void BlockDOBIBSController::update()
 
 //-------------------------------Intergal backstepping----------------------------------------
 
-                            matrix::Vector<float, 3> delta1;
+                        matrix::Vector<float, 3> delta1;
 
-                            delta1(0)=_int_er_0.update(er(0));
-                            delta1(1)=_int_er_1.update(er(1));
-                            delta1(2)=_int_er_2.update(er(2));
+                        delta1(0)=_int_er_0.update(er(0));
+                        delta1(1)=_int_er_1.update(er(1));
+                        delta1(2)=_int_er_2.update(er(2));
 
-                            matrix::Vector<float, 3> delta1_dot=p-pd;
+                        matrix::Vector<float, 3> delta1_dot=p-pd;
 
-                            matrix::Vector<float, 3> alpha1=-k1*delta1+pd;
+                        matrix::Vector<float, 3> alpha1=-k1*delta1+pd;
 
-                            matrix::Vector<float, 3> delta2=p-alpha1;
+                        matrix::Vector<float, 3> delta2=p-alpha1;
 
-                            matrix::Vector<float, 3> delta2_dot=v+k1*(p-pd)-dpd;
+                        matrix::Vector<float, 3> delta2_dot=v+k1*(p-pd)-dpd;
 
-                            matrix::Vector<float, 3> alpha2=-delta1-k1*(p-pd)+dpd-k2*delta2;
+                        matrix::Vector<float, 3> alpha2=-delta1-k1*(p-pd)+dpd-k2*delta2;
 
-                            matrix::Vector<float, 3> delta3=m*v-m*alpha2;
+                        matrix::Vector<float, 3> delta3=m*v-m*alpha2;
 
-                            matrix::Vector<float, 3> alpha3=delta2/m+k3*delta3+m*g*n3+df_hat+m*delta1_dot+m*k1*(v-dpd)-m*ddpd+m*k2*delta2_dot;
+                        matrix::Vector<float, 3> alpha3=delta2/m+k3*delta3+m*g*n3+df_hat+m*delta1_dot+m*k1*(v-dpd)-m*ddpd+m*k2*delta2_dot;
 
-                            matrix::Vector<float, 3>  delta4=alpha3-u*R*n3;
+                        matrix::Vector<float, 3>  delta4=alpha3-u*R*n3;
 
-                            matrix::Vector<float, 3> beta=delta2_dot/m+k3*(m*g*n3-u*R*n3+df_hat+m*delta1_dot+m*k1*(v-dpd)-m*ddpd+m*k2*delta2_dot)+
+                        matrix::Vector<float, 3> beta=delta2_dot/m+k3*(m*g*n3-u*R*n3+df_hat+m*delta1_dot+m*k1*(v-dpd)-m*ddpd+m*k2*delta2_dot)+
                              +m*(v-dpd)+k1*(m*g*n3-u*R*n3+df_hat-m*ddpd)-m*dddpd+k2*(m*g*n3-u*R*n3+df_hat+m*k1*(v-dpd)-m*ddpd);
 
-                            matrix::Matrix<float, 1 , 1>  udot=n3.T()*R.T()*(beta+delta3+k4*delta4);
+                        matrix::Matrix<float, 1 , 1>  udot=n3.T()*R.T()*(beta+delta3+k4*delta4);
 
-                            float  u_dot=udot(0,0);
-                             thrust_input = _iop.update(u_dot);
+                        float  u_dot=udot(0,0);
+                        thrust_input = _iop.update(u_dot);
 
-                             intu=_u_int.update(p(2)-pd(2));
+                        intu=_u_int.update(p(2)-pd(2));
 
 
-                           // matrix::Vector<float, 3> alpha4=R*(eye(3)-n3*n3.T())*R.T()*(beta+delta3+k4*delta4);
+                        // matrix::Vector<float, 3> alpha4=R*(eye(3)-n3*n3.T())*R.T()*(beta+delta3+k4*delta4);
 
-                            matrix::Vector<float, 3> alpha4=R* Ie3*R.T()*(beta+delta3+k4*delta4);
+                        matrix::Vector<float, 3> alpha4=R* Ie3*R.T()*(beta+delta3+k4*delta4);
 
-                            matrix::Vector<float, 3> delta5=alpha4-u*R*Sw*n3;
+                        matrix::Vector<float, 3> delta5=alpha4-u*R*Sw*n3;
 
-                            matrix::Vector<float, 3> beta_dot_hat1=(m*g*n3-u*R*n3+df_hat+m*k1*(v-dpd)-m*ddpd)/(m*m)+
+                        matrix::Vector<float, 3> beta_dot_hat1=(m*g*n3-u*R*n3+df_hat+m*k1*(v-dpd)-m*ddpd)/(m*m)+
                                +k3*(-u_dot*R*n3-u*R*Sw*n3+m*(v-dpd)+k1*(m*g*n3-u*R*n3+df_hat-m*ddpd)
                                     -m*dddpd+k2*(m*g*n3-u*R*n3+df_hat+m*k1*(v-dpd)-m*ddpd));
 
-                            matrix::Vector<float, 3> beta_dot_hat2=(m*g*n3-u*R*n3+df_hat-m*ddpd)+k1*(-u_dot*R*n3-u*R*Sw*n3-m*dddpd)-m*ddddpd+
+                        matrix::Vector<float, 3> beta_dot_hat2=(m*g*n3-u*R*n3+df_hat-m*ddpd)+k1*(-u_dot*R*n3-u*R*Sw*n3-m*dddpd)-m*ddddpd+
                                         k2*(-u_dot*R*n3-u*R*Sw*n3+k1*(m*g*n3-u*R*n3+df_hat-m*ddpd)-m*dddpd);
 
-                            matrix::Vector<float, 3> beta_dot_hat=beta_dot_hat1+beta_dot_hat2;
+                        matrix::Vector<float, 3> beta_dot_hat=beta_dot_hat1+beta_dot_hat2;
 
-                            matrix::Vector<float, 3>  delta3_dot_hat=m*g*n3-u*R*n3+df_hat+m*delta1_dot+m*k1*(v-dpd)-m*ddpd+m*k2*delta2_dot;
+                        matrix::Vector<float, 3>  delta3_dot_hat=m*g*n3-u*R*n3+df_hat+m*delta1_dot+m*k1*(v-dpd)-m*ddpd+m*k2*delta2_dot;
 
-                            matrix::Vector<float, 3>  delta4_dot_hat=beta-u_dot*R*n3-u*R*Sw*n3;
+                        matrix::Vector<float, 3>  delta4_dot_hat=beta-u_dot*R*n3-u*R*Sw*n3;
 
-                            matrix::Vector<float, 3>  alpha4_dot_hat=R*Sw*Ie3*R.T()*(beta+delta3+k4*delta4)+
+                        matrix::Vector<float, 3>  alpha4_dot_hat=R*Sw*Ie3*R.T()*(beta+delta3+k4*delta4)+
                                 R*Ie3*Sw.T()*R.T()*(beta+delta3+k4*delta4)+
                                 R*Ie3*R.T()*(beta_dot_hat+delta3_dot_hat+k4*delta4_dot_hat);
 
-                           matrix::Vector<float, 3> wddot=alpha4_dot_hat - u_dot*R*Sw*n3 + delta4 +k5*delta5-u*R*Sw*Sw*n3;
+                        matrix::Vector<float, 3> wddot=alpha4_dot_hat - u_dot*R*Sw*n3 + delta4 +k5*delta5-u*R*Sw*Sw*n3;
 
-                           matrix::Matrix<float, 1 , 1>  wddot0;
-                           wddot0= -(n2.T()*R.T())*(wddot)/u;
+                        matrix::Matrix<float, 1 , 1>  wddot0;
+                        wddot0= -(n2.T()*R.T())*(wddot)/u;
 
-                           matrix::Matrix<float, 1 , 1>  wddot1;
-                           wddot1= (n1.T()*R.T())*(wddot)/u;
+                        matrix::Matrix<float, 1 , 1>  wddot1;
+                        wddot1= (n1.T()*R.T())*(wddot)/u;
 
 
                         // Backstepping controller
@@ -420,185 +408,185 @@ void BlockDOBIBSController::update()
 //                         matrix::Matrix<float, 1 , 1>  wddot1;
 //                         wddot1= (n1.T()*R.T())*(wddot)/u;
 
-                          // DOB integral action
+                        // DOB integral action
 
-                          matrix::Vector<float, 3>  h=obs*(-k_df*(df_hat1)-k_df*(m*g*n3-u*R*n3));//-------------------------------------------------
+                        matrix::Vector<float, 3>  h=obs*(-k_df*(df_hat1)-k_df*(m*g*n3-u*R*n3));//-------------------------------------------------
 
-                          if (  z_df_0 > 1.5f && h(0) >0){
-                                  d_zdf_0 =0.0f;
-                          } else if (  z_df_0 < -1.5f &&  h(0) < 0){
-                                  d_zdf_0 =0.0f;
-                          }else{
-                                  d_zdf_0 = h(0);
-                          }
-                           z_df_0 = i_df_0.update( d_zdf_0);
+                        if (  z_df_0 > 1.5f && h(0) >0){
+                                d_zdf_0 =0.0f;
+                        } else if (  z_df_0 < -1.5f &&  h(0) < 0){
+                                d_zdf_0 =0.0f;
+                        }else{
+                                d_zdf_0 = h(0);
+                        }
+                        z_df_0 = i_df_0.update( d_zdf_0);
 
-                          if (  z_df_1 > 1.5f && h(1) >0){
-                                  d_zdf_1 =0.0f;
-                          } else if (  z_df_1 < -1.5f &&  h(1) < 0){
-                                  d_zdf_1 =0.0f;
-                          }else{
-                                  d_zdf_1 = h(1);
-                          }
-                           z_df_1 = i_df_1.update( d_zdf_1);
+                        if (  z_df_1 > 1.5f && h(1) >0){
+                                d_zdf_1 =0.0f;
+                        } else if (  z_df_1 < -1.5f &&  h(1) < 0){
+                                d_zdf_1 =0.0f;
+                        }else{
+                                d_zdf_1 = h(1);
+                        }
+                        z_df_1 = i_df_1.update( d_zdf_1);
 
-                          if (  z_df_2 > 6.0f && h(2) >0){
-                                  d_zdf_2 =0.0f;
-                          } else if (  z_df_2 < -6.0f &&  h(2) < 0){
-                                  d_zdf_2 =0.0f;
-                          }else{
-                                  d_zdf_2 = h(2);
-                          }
-                           z_df_2 = i_df_2.update( d_zdf_2);
+                        if (  z_df_2 > 6.0f && h(2) >0){
+                                d_zdf_2 =0.0f;
+                        } else if (  z_df_2 < -6.0f &&  h(2) < 0){
+                                d_zdf_2 =0.0f;
+                        }else{
+                                d_zdf_2 = h(2);
+                        }
+                        z_df_2 = i_df_2.update( d_zdf_2);
 
-                          // Yaw control
-                          float k_psi_1=1.5;
-                          float k_psi_2=2.3;
-                          float psi_d=0;
-                          float psi_d_dot=0;
-                          float psi_d_ddot=0;
-                          float ep_1=psi-psi_d;
-                          float alpha_psi_1=psi_d_dot-k_psi_1*ep_1;
+                        // Yaw control
+                        float k_psi_1=1.5;
+                        float k_psi_2=2.3;
+                        float psi_d=0;
+                        float psi_d_dot=0;
+                        float psi_d_ddot=0;
+                        float ep_1=psi-psi_d;
+                        float alpha_psi_1=psi_d_dot-k_psi_1*ep_1;
 
-                           float ep_2=w(2)-alpha_psi_1;
-                           float cos_theta= cos(theta);
-                           float sin_theta= sin(theta);
-                           float sin_phi=sin(phi);
-                           float cos_phi=cos(phi);
-                           float phi_dot=w(0);
-                           float theta_dot=w(1);
+                        float ep_2=w(2)-alpha_psi_1;
+                        float cos_theta= cos(theta);
+                        float sin_theta= sin(theta);
+                        float sin_phi=sin(phi);
+                        float cos_phi=cos(phi);
+                        float phi_dot=w(0);
+                        float theta_dot=w(1);
 
-                           float n3Wdot=(cos_phi*phi_dot/cos_theta+sin_phi/(cos_theta*cos_theta)*sin_theta*theta_dot)*w(1)+(-sin_phi*phi_dot/cos_theta+cos_phi/(cos_theta*cos_theta)*sin_theta*theta_dot)*w(2);
-                           float alpha_psi_dot=psi_d_ddot-k_psi_1*(w(2)-psi_d_dot);
-                           float wddot3;
+                        float n3Wdot=(cos_phi*phi_dot/cos_theta+sin_phi/(cos_theta*cos_theta)*sin_theta*theta_dot)*w(1)+(-sin_phi*phi_dot/cos_theta+cos_phi/(cos_theta*cos_theta)*sin_theta*theta_dot)*w(2);
+                        float alpha_psi_dot=psi_d_ddot-k_psi_1*(w(2)-psi_d_dot);
+                        float wddot3;
 
-                         wddot3= cos_theta*(alpha_psi_dot-ep_1-k_psi_2*ep_2-n3Wdot-sin_phi* wddot1(0,0)/cos_theta)/cos_phi;
+                        wddot3= cos_theta*(alpha_psi_dot-ep_1-k_psi_2*ep_2-n3Wdot-sin_phi* wddot1(0,0)/cos_theta)/cos_phi;
 
 
-                         // Adding robusness terms (pid) to torques
+                        // Adding robusness terms (pid) to torques
                         // matrix::Vector<float, 3> er=(p-pd);
 
-                         matrix::Vector<float, 3> eb=3.0f*R.T()*(p-pd);
+                        matrix::Vector<float, 3> eb=3.0f*R.T()*(p-pd);
 
-                         matrix::Vector<float, 3> ev=0.5f*R.T()*(v-dpd)+0.2f*eb;
+                        matrix::Vector<float, 3> ev=0.5f*R.T()*(v-dpd)+0.2f*eb;
 
-                         // reseting the integral terms
-                          if (_status.get().nav_state == vehicle_status_s::NAVIGATION_STATE_ANCL2){
-                          _iw0.setzero();
-                          _iw1.setzero();
-                          _iw2.setzero();
-                          _u_int.setzero();
-                          _int_er_0.setzero();
-                          _int_er_1.setzero();
-                          _int_er_2.setzero();
-                          _u_int.setzero();
-                          _iop.setzero();
-                           }
+                        // reseting the integral terms
+                        if (_status.get().nav_state == vehicle_status_s::NAVIGATION_STATE_ANCL2){
+                        _iw0.setzero();
+                        _iw1.setzero();
+                        _iw2.setzero();
+                        _u_int.setzero();
+                        _int_er_0.setzero();
+                        _int_er_1.setzero();
+                        _int_er_2.setzero();
+                        _u_int.setzero();
+                        _iop.setzero();
+                        }
 
-                         if (intw0 > 0.5f && eb(1) >0){
-                                 iw0 =0.0f;
-                         } else if (  intw0 < -0.5f &&  eb(1) < 0){
-                                 iw0 =0.0f;
-                         }else{
+                        if (intw0 > 0.5f && eb(1) >0){
+                                iw0 =0.0f;
+                        } else if (  intw0 < -0.5f &&  eb(1) < 0){
+                                iw0 =0.0f;
+                        }else{
                                iw0=eb(1);
-                         }
+                        }
                            intw0= _iw0.update( iw0)+ev(1);
 
 
 
-                         if ( intw1 > 0.5f && eb(0) >0){
-                                 iw1 =0.0f;
-                         } else if (  intw1 < -0.5f &&  eb(0) < 0){
-                                 iw1=0.0f;
-                         }else{
+                        if ( intw1 > 0.5f && eb(0) >0){
+                                iw1 =0.0f;
+                        } else if (  intw1 < -0.5f &&  eb(0) < 0){
+                                iw1=0.0f;
+                        }else{
                                iw1=eb(0);
-                         }
+                        }
                             intw1= _iw1.update( iw1)+ev(0);
 
 
-                         float epsi_p_v=ep_1+(w(2)-psi_d_dot);
-                         if (  intw2 > 0.5f && ep_1 >0){
-                                 iw2 =0.0f;
-                         } else if (  intw2 < -0.5f && ep_1 < 0){
-                                 iw2 =0.0f;
-                         }else{
+                        float epsi_p_v=ep_1+(w(2)-psi_d_dot);
+                        if (  intw2 > 0.5f && ep_1 >0){
+                                iw2 =0.0f;
+                        } else if (  intw2 < -0.5f && ep_1 < 0){
+                                iw2 =0.0f;
+                        }else{
                                iw2=ep_1;
-                         }
+                        }
                            intw2= _iw2.update( iw2)+epsi_p_v;
 
-                         // Saturating the intergal terms
-                         float intw0_sat;
-                         if (intw0 > 0.70f){
-                         intw0_sat = 0.70f;
-                         } else if (intw0 < -0.70f) {
-                                 intw0_sat =-0.70f;
-                         }
-                         else{
+                        // Saturating the intergal terms
+                        float intw0_sat;
+                        if (intw0 > 0.70f){
+                        intw0_sat = 0.70f;
+                        } else if (intw0 < -0.70f) {
+                                intw0_sat =-0.70f;
+                        }
+                        else{
                              intw0_sat=intw0;
-                         }
+                        }
 
-                         float intw1_sat;
-                         if (intw1 > 0.7f){
-                         intw1_sat = 0.7f;
-                         } else if (intw1 < -0.7f) {
-                                 intw1_sat =-0.7f;
-                         }
-                         else{
+                        float intw1_sat;
+                        if (intw1 > 0.7f){
+                        intw1_sat = 0.7f;
+                        } else if (intw1 < -0.7f) {
+                                intw1_sat =-0.7f;
+                        }
+                        else{
                              intw1_sat=intw1;
-                         }
+                        }
 
-                         float intw2_sat;
-                         if (intw2 > 0.7f){
-                         intw2_sat = 0.7f;
-                         } else if (intw2 < -0.7f) {
-                                 intw2_sat =-0.7f;
-                         }
-                         else{
+                        float intw2_sat;
+                        if (intw2 > 0.7f){
+                        intw2_sat = 0.7f;
+                        } else if (intw2 < -0.7f) {
+                                intw2_sat =-0.7f;
+                        }
+                        else{
                              intw2_sat=intw2;
-                         }
+                        }
 
 
 // reseting the saturation variables
-                         if (_status.get().nav_state == vehicle_status_s::NAVIGATION_STATE_ANCL1){
+                        if (_status.get().nav_state == vehicle_status_s::NAVIGATION_STATE_ANCL1){
                            //  res=0;
                              intw0_sat=0.0f;
                              intw1_sat=0.0f;
                              intw2_sat=0.0f;
-                         }
+                        }
 
                          // angular velocity derivative calculation for adding to torque as robustness terms
-                         float dw0=0.008f*(prev_rates(0) - w(0)) /(1.0f* dt);
+                        float dw0=0.008f*(prev_rates(0) - w(0)) /(1.0f* dt);
 
-                         if (dw0 > 0.48f){
-                         dw0 = 0.48f;
-                         } else if (dw0 < -0.48f) {
-                                 dw0 =-0.48f;
-                         }
+                        if (dw0 > 0.48f){
+                        dw0 = 0.48f;
+                        } else if (dw0 < -0.48f) {
+                                dw0 =-0.48f;
+                        }
 
-                         float dw1=0.006f*(prev_rates(1) - w(1)) /(1.0f* dt);
-                         if (dw1 > 0.65f){
-                         dw1 = 0.65f;
-                         } else if (dw1 < -0.65f) {
-                                 dw1 =-0.65f;
-                         }
+                        float dw1=0.006f*(prev_rates(1) - w(1)) /(1.0f* dt);
+                        if (dw1 > 0.65f){
+                        dw1 = 0.65f;
+                        } else if (dw1 < -0.65f) {
+                                dw1 =-0.65f;
+                        }
 
-                         // gains for adding pid to the thrust
-                         float ki_u=4.5;
-                         float kv_u=4.5;
-                         float kp_u=8.1;
+                        // gains for adding pid to the thrust
+                        float ki_u=4.5;
+                        float kv_u=4.5;
+                        float kp_u=8.1;
 
-                         quad_input[0] =J1*wddot0(0,0)+dw0-0.007f*(intw0_sat);//-0.007f
-                         quad_input[1] =J2*wddot1(0,0)+dw1+0.025f*(intw1_sat);//+0.007f
-                         quad_input[2] =J3*wddot3+0.02f*intw2_sat;//(w(0)-prev_rates2(0))/(dt*2.0f)+0.0f*J3*wddot3;
-                         quad_input[3] = thrust_input+4.0f*(ki_u*intu+kv_u*(v(2)-dpd(2))+kp_u*(p(2)-pd(2)));
+                        quad_input[0] =J1*wddot0(0,0)+dw0-0.007f*(intw0_sat);//-0.007f
+                        quad_input[1] =J2*wddot1(0,0)+dw1+0.025f*(intw1_sat);//+0.007f
+                        quad_input[2] =J3*wddot3+0.02f*intw2_sat;//(w(0)-prev_rates2(0))/(dt*2.0f)+0.0f*J3*wddot3;
+                        quad_input[3] = thrust_input+4.0f*(ki_u*intu+kv_u*(v(2)-dpd(2))+kp_u*(p(2)-pd(2)));
 
-                           prev_rates2(0) =  prev_rates(0) ;
-                           prev_rates2(1) =  prev_rates(1) ;
-                           prev_rates2(2) =  prev_rates(2) ;
+                        prev_rates2(0) =  prev_rates(0) ;
+                        prev_rates2(1) =  prev_rates(1) ;
+                        prev_rates2(2) =  prev_rates(2) ;
 
-                           prev_rates(0) = w(0);
-                           prev_rates(1) = w(1);
-                           prev_rates(2) = w(2);
+                        prev_rates(0) = w(0);
+                        prev_rates(1) = w(1);
+                        prev_rates(2) = w(2);
 
                          // normalization and saturation of thrust and torques
                         float nor_thrust=(quad_input[3]-15.68f)/110.0f+0.63f;
@@ -636,10 +624,10 @@ void BlockDOBIBSController::update()
                         }
 
                         // publishing the controls to the secondary control setpoint
-                   _control_sp.get().control[0] = quad_input[0];
-                   _control_sp.get().control[1] = quad_input[1];
-                   _control_sp.get().control[2] = quad_input[2];
-                   _control_sp.get().control[3] = sat_thrust;
+                        _control_sp.get().control[0] = quad_input[0];
+                        _control_sp.get().control[1] = quad_input[1];
+                        _control_sp.get().control[2] = quad_input[2];
+                        _control_sp.get().control[3] = sat_thrust;
 
 
 
@@ -653,30 +641,30 @@ void BlockDOBIBSController::update()
 
 
                     // publishing data for logging
-                         _att_sp.get().roll   = phi;
-                         _att_sp.get().pitch  = theta;
-                         _att_sp.get().yaw    = psi;
-                         _att_sp.get().thrust = thrust_input;
-                         _att_sp.get().valid  = true;
+                        _att_sp.get().roll   = phi;
+                        _att_sp.get().pitch  = theta;
+                        _att_sp.get().yaw    = psi;
+                        _att_sp.get().thrust = thrust_input;
+                        _att_sp.get().valid  = true;
 
-                         _att_sp.get().er[0] =er(0);
-                         _att_sp.get().er[1] =er(1);
-                         _att_sp.get().er[2] =er(2);
-                         _att_sp.get().er[3] =ep_1;
+                        _att_sp.get().er[0] =er(0);
+                        _att_sp.get().er[1] =er(1);
+                        _att_sp.get().er[2] =er(2);
+                        _att_sp.get().er[3] =ep_1;
 
-                         _att_sp.get().pd[0] =pd(0);
-                         _att_sp.get().pd[1] =pd(1);
-                         _att_sp.get().pd[2] =pd(2);
+                        _att_sp.get().pd[0] =pd(0);
+                        _att_sp.get().pd[1] =pd(1);
+                        _att_sp.get().pd[2] =pd(2);
 
-                         _att_sp.get().p[0] =p(0);
-                         _att_sp.get().p[1] =p(1);
-                         _att_sp.get().p[2] =p(2);
+                        _att_sp.get().p[0] =p(0);
+                        _att_sp.get().p[1] =p(1);
+                        _att_sp.get().p[2] =p(2);
 
-                          _att_sp.get().df[0] =df_hat(0);
-                          _att_sp.get().df[1] =df_hat(1);
-                          _att_sp.get().df[2] =df_hat(2);
+                        _att_sp.get().df[0] =df_hat(0);
+                        _att_sp.get().df[1] =df_hat(1);
+                        _att_sp.get().df[2] =df_hat(2);
 
-                          _att_sp.get().st =switch_time;
+                        _att_sp.get().st =switch_time;
 
         }
 }

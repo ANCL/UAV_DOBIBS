@@ -51,6 +51,71 @@
  */
 PARAM_DEFINE_INT32(MC_DOBIBS_TRAJ, 0);
 
+/**
+ * Controller Gain
+ * 
+ * @unit norm
+ * @min 0
+ * @decimal 2
+ * @increment 0.1
+ * @group Multicopter DOBIBS Control
+ */
+PARAM_DEFINE_FLOAT(DOBIBS_CG_K1, 4.0f);
+
+/**
+ * Controller Gain
+ * 
+ * @unit norm
+ * @min 0
+ * @decimal 2
+ * @increment 0.1
+ * @group Multicopter DOBIBS Control
+ */
+PARAM_DEFINE_FLOAT(DOBIBS_CG_K2, 4.0f);
+
+/**
+ * Controller Gain
+ * 
+ * @unit norm
+ * @min 0
+ * @decimal 2
+ * @increment 0.1
+ * @group Multicopter DOBIBS Control
+ */
+PARAM_DEFINE_FLOAT(DOBIBS_CG_K3, 4.0f);
+
+/**
+ * Controller Gain
+ * 
+ * @unit norm
+ * @min 0
+ * @decimal 2
+ * @increment 0.1
+ * @group Multicopter DOBIBS Control
+ */
+PARAM_DEFINE_FLOAT(DOBIBS_CG_K4, 4.0f);
+
+/**
+ * Controller Gain 
+ * 
+ * @unit norm
+ * @min 0
+ * @decimal 2
+ * @increment 0.1
+ * @group Multicopter DOBIBS Control
+ */
+PARAM_DEFINE_FLOAT(DOBIBS_CG_K5, 4.0f);
+
+/**
+ * Disturbance Observer Gain
+ * 
+ * @unit norm
+ * @min 0
+ * @decimal 2
+ * @increment 0.05
+ * @group Multicopter DOBIBS Control
+ */
+PARAM_DEFINE_FLOAT(DOBIBS_DOG_K, 0.5f);
 
 /**
 *  Integration parameter

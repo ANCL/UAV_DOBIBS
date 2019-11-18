@@ -30,15 +30,25 @@ public:
         _int_er_2(this,"I_PARAM"),
         _fds(),
         _t(0),
-        _switch_traj(0),
 	    prev_rates(),
 	    prev_rates2(),
-        rate_int()
+        rate_int(),
+        pd(),
+        dpd(),
+        ddpd(),
+        dddpd(),
+        ddddpd()
     {
         _fds[0].fd = _pos.getHandle();
         _fds[0].events = POLLIN;
         switch_traj = param_find("MC_DOBIBS_TRAJ");
         param_get(switch_traj, &_switch_traj);
+        param_get(param_find("DOBIBS_CG_K1"), &k1);
+        param_get(param_find("DOBIBS_CG_K2"), &k2);
+        param_get(param_find("DOBIBS_CG_K3"), &k3);
+        param_get(param_find("DOBIBS_CG_K4"), &k4);
+        param_get(param_find("DOBIBS_CG_K5"), &k5);
+        param_get(param_find("DOBIBS_DOG_K"), &k_df);
     }
     void update();
     int parameters_update();
@@ -61,6 +71,16 @@ private:
 
     // params
     param_t switch_traj;
+
+
+    // Integral Backstepping  Gains
+    float k1;
+    float k2;
+    float k3;
+    float k4;
+    float k5;
+    //Observer gain
+    float k_df;
 
     float obs=0;
     float thrust_input=10;
@@ -86,5 +106,10 @@ private:
     int _switch_traj;
     matrix::Vector<float, 3>  prev_rates;
     matrix::Vector<float, 3>  prev_rates2;
-    matrix::Vector<float, 3>  rate_int;    
+    matrix::Vector<float, 3>  rate_int; 
+    matrix::Vector<float, 3>  pd;
+    matrix::Vector<float, 3>  dpd;
+    matrix::Vector<float, 3>  ddpd;
+    matrix::Vector<float, 3>  dddpd;
+    matrix::Vector<float, 3>  ddddpd;   
 };
