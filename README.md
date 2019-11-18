@@ -19,7 +19,7 @@ The code simulates a disturbance observer-based integral backstepping control fo
 
 ## Important Folders and Files
 
-1. Folder containing the module which implements the backstepping controller: [mc_TASK](./src/modules/mc_TASK)
+1. Folder containing the module which implements the backstepping controller: [mc_dobibs_control](./src/modules/mc_dobibs_control)
 
 2. cmake config file for compiling the project: [posix_sitl_custom](./cmake/configs/posix.sitl_custom.cmake)
 
@@ -94,9 +94,10 @@ A separate jMAVSim window should launch which shows the quadrotor in a virtual w
 The reason for having the **ANCL1** mode is to simplify actual flight testing of various trajectories where **ANCL1** provides an initial condition for other tractories defined in **ANCL2**.
 
 ```
-commander mode ancl1
-commander arm # arm the quad, make the quad hover at 1 meter height
-commander mode ancl2 # change the mode to use backstepping control
+pxh> mc_dobibs_control start  # Start our controller
+pxh> commander mode ancl1
+pxh> commander arm # arm the quad, make the quad hover at 1 meter height
+pxh> commander mode ancl2 # change the mode to use backstepping control
 ```
 
 ## Debug/Customize Controller
@@ -122,10 +123,21 @@ This allows a faster testing cycle (restarting jMAVSim takes significantly more 
 
 **Beckstepping Controller**'s default reference trajectory is "**figure 8**". 
 
-If you want to change the trajectory, you can go to [mc_TASK/BlockTASKController.cpp](./src/modules/mc_TASK/BlockTASKController.cpp#L138), and then change the parameter: ```switch_traj```to set your desired trajectory(e.g. circle, setpoint)
+If you want to change the trajectory, you can go to [mc_dobibs_control_param.c](./src/modules/mc_dobibs_control/mc_dobibs_control_params.c#52), and then change the parameter: ```MC_DOBIBS_TRAJ```to set your desired trajectory(e.g. circle, setpoint)
+
+### 3. Tune Controller Gain
+
+Our code utilized [PX4 Parameter System](https://dev.px4.io/v1.9.0/en/advanced/parameters_and_configurations.html), so you can tune the controller gain while the simulation on.
+
+e.g.: You can use the following command to tune the controller gain in the simulation POSIX shell:
+
+```
+pxh> param set [PARAM_NAME] [NEW_PARAM_VALUE]
+```
+
+For all the parameters option, you can see the [mc_dobibs_control_param.c](./src/modules/mc_dobibs_control/mc_dobibs_control_params.c).
 
 ## Citing
 
 ## Acknowledgement
 Thanks to the [PX4 team](https://px4.io/) for their open-source autopilot on which this code is based.
-
