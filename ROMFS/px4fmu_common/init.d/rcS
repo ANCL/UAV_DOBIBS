@@ -1034,12 +1034,6 @@ then
 
 	fi
 
-# choose if want to start mc_TASK
-
-# mc_TASK start
-# logger on
-
-# end with mc_TASK
 
 # End of autostart
 fi
