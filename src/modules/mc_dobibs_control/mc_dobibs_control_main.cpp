@@ -123,7 +123,8 @@ int mc_dobibs_control_main(int argc, char *argv[])
 {
 
 	if (argc < 2) {
-		usage("missing command");
+		warnx("usage: mc_dobibs_control {start|stop|status}");
+		return 1;
 	}
 
 	if (!strcmp(argv[1], "start")) {
