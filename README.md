@@ -83,7 +83,8 @@ pxh>
 ```
 
 A separate jMAVSim window should launch which shows the quadrotor in a virtual world. You can begin flying once you have a position lock which is when PXH shell displays `gps init`.
-![jmavsim](./Doc/jmavsim.jpg)
+
+<div align=center><img src="./Doc/jmavsim.jpg"/></div>
 
 2. Changing the flight mode. * There are two flying modes in our customized version of PX4: **ANCL1** and **ANCL2**.
 
