@@ -1,0 +1,266 @@
+#!nsh
+#
+# @name 3DR DIY Quad
+#
+# @type Quadrotor x
+#
+# @maintainer Geoff
+#
+
+sh /etc/init.d/rc.mc_defaults
+
+if [ $AUTOCNF == yes ]
+then
+
+	#Mavlink System ID (should match what is being sent by the Vicon computer)
+	param set MAV_SYS_ID 2
+	
+	#MAVLINK 2 - Vision Computer or wifly
+	#param set SYS_COMPANION 921600 #Vision comp
+	param set SYS_COMPANION 230400 #wifly
+	
+	#Logger (new)
+	param set SYS_LOGGER 1
+
+	#Inner Loop
+	param set MC_ROLL_TC 0.16
+	param set MC_ROLL_P 6.5
+	param set MC_ROLLRATE_P 0.14
+	param set MC_ROLLRATE_I 0.1
+	param set MC_ROLLRATE_D 0.004
+	param set MC_ROLLRATE_FF 0.0
+	param set MC_ROLLRATE_MAX 20.0
+
+	param set MC_PITCH_TC 0.16
+	param set MC_PITCH_P 6.0
+	param set MC_PITCHRATE_P 0.14
+	param set MC_PITCHRATE_I 0.09
+	param set MC_PITCHRATE_D 0.004
+	param set MC_PITCHRATE_FF 0.0
+	param set MC_PITCHRATE_MAX 20.0
+
+	param set MC_YAW_P 2.8
+	param set MC_YAWRATE_P 0.2
+	param set MC_YAWRATE_I 0.1
+	param set MC_YAWRATE_D 0.0
+	param set MC_YAWRATE_FF 0.0
+	param set MC_YAWRATE_MAX 10.0
+	param set MC_YAWRAUTO_MAX 45.05
+	#Use Q attitude estimator and LPE
+	param set SYS_MC_EST_GROUP 1
+
+	#Q Attitude Estimator
+	param set ATT_W_ACC 0.2
+	param set ATT_W_MAG 0.0
+	param set ATT_W_EXT_HDG 0.9
+	param set ATT_W_GYRO_BIAS 0.1
+	param set ATT_MAG_DECL 0.0
+	param set ATT_MAG_DECL_A 1
+	param set ATT_EXT_HDG_M 2
+	param set ATT_ACC_COMP 3
+	param set ATT_BIAS_MAX 0.05
+	param set ATT_VIBE_THRESH 0.2
+
+	#Position Estimator
+	param set LPE_PUB_AGL_Z 0.0
+	param set LPE_FLW_OFF_Z 0.0000
+	param set LPE_FLW_SCALE 1.3000
+	param set LPE_FLW_GYRO_CMP 1
+	param set LPE_FLW_QMIN 150
+	param set LPE_SNR_Z 0.0500
+	param set LPE_SNR_OFF_Z 0.0000
+	param set LPE_LDR_Z 0.0300
+	param set LPE_LDR_OFF_Z 0.0000
+	param set LPE_ACC_XY 0.0120
+	param set LPE_ACC_Z 0.0200
+	param set LPE_BAR_Z 3.0000
+	param set LPE_GPS_ON 0
+	param set LPE_GPS_DELAY 0.2900
+	param set LPE_GPS_XY 1.0000
+	param set LPE_GPS_Z 3.0000
+	param set LPE_GPS_VXY 0.2500
+	param set LPE_GPS_VZ 0.2500
+	param set LPE_EPH_MAX 3.0000
+	param set LPE_EPV_MAX 5.0000
+	param set LPE_VIS_DELAY 0.1000
+	param set LPE_VIS_XY 0.1000
+	param set LPE_VIS_Z 0.5000
+	param set LPE_VIS_ON 0
+	param set LPE_VIC_P 0.0010
+	param set LPE_VCN_ON 1
+	param set LPE_VCN_P 0.0100
+	param set LPE_VCN_V 0.1000
+	param set LPE_PN_P 0.1000
+	param set LPE_PN_V 0.1000
+	param set LPE_PN_B 0.0010
+	param set LPE_PN_T 0.0010
+	param set LPE_T_MAX_GRADE 1.0000
+	param set LPE_FGYRO_HP 0.0010
+	param set LPE_LAT 53.5270
+	param set LPE_LON -113.5300
+	param set LPE_X_LP 5.0000
+	param set LPE_VXY_PUB 0.3000
+	param set LPE_Z_PUB 1.0000
+	param set LPE_LAND_Z 0.0300
+
+	#Position Control
+	param set MPC_THR_MIN 0.2000
+	param set MPC_THR_HOVER 0.5000
+	param set MPC_ALTCTL_DZ 0.1000
+	param set MPC_ALTCTL_DY 0.0000
+	param set MPC_THR_MAX 0.9500
+	param set MPC_MANTHR_MIN 0.0300
+	param set MPC_MANTHR_MAX 0.9000
+	param set MPC_Z_P 1.0000
+	param set MPC_Z_VEL_P 0.2000
+	param set MPC_Z_VEL_I 0.0200
+	param set MPC_Z_VEL_D 0.0000
+	param set MPC_Z_VEL_MAX_UP 3.0000
+	param set MPC_Z_VEL_MAX 3.0000
+	param set MPC_Z_VEL_MAX_DN 3.0000
+	param set MPC_Z_FF 0.3000
+	param set MPC_XY_P 1.0000
+	param set MPC_XY_VEL_P 0.1000
+	param set MPC_XY_VEL_I 0.0200
+	param set MPC_XY_VEL_D 0.0100
+	param set MPC_XY_CRUISE 5.0000
+	param set MPC_XY_VEL_MAX 1.0000
+	param set MPC_XY_FF 0.2000
+	param set MPC_TILTMAX_AIR 45.0000
+	param set MPC_TILTMAX_LND 12.0000
+	param set MPC_LAND_SPEED 0.5000
+	param set MPC_TKO_SPEED 1.5000
+	param set MPC_MAN_R_MAX 35.0000
+	param set MPC_MAN_P_MAX 35.0000
+	param set MPC_MAN_Y_MAX 200.000000
+	param set MPC_HOLD_XY_DZ 0.1000
+	param set MPC_HOLD_MAX_XY 0.8000
+	param set MPC_HOLD_MAX_Z 0.6000
+	param set MPC_VELD_LP 5.0000
+	param set MPC_ACC_HOR_MAX 5.0000
+	param set MPC_ALT_MODE 0
+	param set MPC_MG 0.3000
+
+	#Circuit Breakers
+	param set CBRK_AIRSPD_CHK 162128
+	param set CBRK_FLIGHTTERM 121212
+	param set CBRK_ENGINEFAIL 284953
+	param set CBRK_GPSFAIL 240024
+
+	#Radio
+	param set RC1_MIN 1100
+	param set RC1_TRIM 1500
+	param set RC1_MAX 1900
+	param set RC1_REV 1.00
+	param set RC1_DZ 10.0
+	param set RC2_MIN 1100
+	param set RC2_TRIM 1500
+	param set RC2_MAX 1900
+	param set RC2_REV 1.00
+	param set RC2_DZ 10.0
+	param set RC3_MIN 1100
+	param set RC3_TRIM 1500
+	param set RC3_MAX 1900
+	param set RC3_REV 1.00
+	param set RC3_DZ 10.0
+	param set RC4_MIN 1100
+	param set RC4_TRIM 1500
+	param set RC4_MAX 1900
+	param set RC4_REV 1.00
+	param set RC4_DZ 10.0
+	param set RC5_MIN 1100
+	param set RC5_TRIM 1500
+	param set RC5_MAX 1900
+	param set RC5_REV -1.00
+	param set RC5_DZ 10.0
+	param set RC6_MIN 1100
+	param set RC6_TRIM 1500
+	param set RC6_MAX 1900
+	param set RC6_REV -1.00
+	param set RC6_DZ 10.0
+	param set RC7_MIN 1100
+	param set RC7_TRIM 1500
+	param set RC7_MAX 1900
+	param set RC7_REV -1.00
+	param set RC7_DZ 10.0
+	param set RC8_MIN 1100
+	param set RC8_TRIM 1500
+	param set RC8_MAX 1900
+	param set RC8_REV -1.00
+	param set RC8_DZ 10.0
+
+	#RADIO MAPING
+	param set RC_MAP_ROLL 1
+	param set RC_MAP_PITCH 2
+	param set RC_MAP_THROTTLE 3
+	param set RC_MAP_YAW 4
+	param set RC_MAP_KILL_SW 5
+	param set RC_MAP_MODE_SW 6
+	param set RC_MAP_ANCL_SW 7
+
+	#Thresholds
+	param set RC_ASSIST_TH 0.250
+	param set RC_POSCTL_TH 0.500
+	param set RC_AUTO_TH 0.750
+	param set RC_KILLSWITCH_TH 0.250
+	param set RC_ANCL_MID_TH 0.250
+	param set RC_ANCL_ON_TH 0.750
+
+	#Calibration Data - Should be redone
+	param set CAL_ACC0_ID 1246218
+	param set CAL_ACC0_XOFF -0.254999995231628418
+	param set CAL_ACC0_XSCALE 0.999704122543334961
+	param set CAL_ACC0_YOFF -0.150999993085861206
+	param set CAL_ACC0_YSCALE 0.992859303951263428
+	param set CAL_ACC0_ZOFF -0.449606418609619141
+	param set CAL_ACC0_ZSCALE 0.995709776878356934
+	param set CAL_ACC1_ID 1114634
+	param set CAL_ACC1_XOFF 1.110893249511718750
+	param set CAL_ACC1_XSCALE 0.996211469173431396
+	param set CAL_ACC1_YOFF 1.033644199371337891
+	param set CAL_ACC1_YSCALE 1.024436712265014648
+	param set CAL_ACC1_ZOFF 1.306686878204345703
+	param set CAL_ACC1_ZSCALE 0.986839115619659424
+	param set CAL_ACC_PRIME 1246218
+	param set CAL_BARO_PRIME 0
+	param set CAL_GYRO0_ID 2162688
+	param set CAL_GYRO0_XOFF 0.0114
+	param set CAL_GYRO0_YOFF 0.0470
+	param set CAL_GYRO0_ZOFF -0.0114
+	param set CAL_GYRO1_ID 2228490
+	param set CAL_GYRO1_XOFF 0.0884
+	param set CAL_GYRO1_YOFF 0.0209
+	param set CAL_GYRO1_ZOFF 0.0148
+	param set CAL_GYRO2_ID 0
+	param set CAL_GYRO_PRIME 2162688
+	param set CAL_MAG0_ID 131594
+	param set CAL_MAG0_ROT -1
+	param set CAL_MAG0_XOFF 0.116576984524726868
+	param set CAL_MAG0_XSCALE 1.000000000000000000
+	param set CAL_MAG0_YOFF -0.116758279502391815
+	param set CAL_MAG0_YSCALE 1.000000000000000000
+	param set CAL_MAG0_ZOFF 0.194605514407157898
+	param set CAL_MAG0_ZSCALE 1.000000000000000000
+	param set CAL_MAG1_ID 0
+	param set CAL_MAG1_ROT -1
+	param set CAL_MAG2_ID 0
+	param set CAL_MAG2_ROT -1
+	param set CAL_MAG_PRIME 131594
+	param set CAL_MAG_SIDES 63
+
+	#Battery
+	param set BAT_N_CELLS 3
+	param set BAT_V_DIV 10.3843
+	param set BAT_A_PER_V 39.5
+	param set BAT_CNT_V_VOLT 0.0008
+	param set BAT_CNT_V_CURR 0.0008
+
+fi
+
+set MIXER quad_ancl
+set PWM_OUT 1234
+set PWM_MIN 1100
+set PWM_MAX 1950
+set GPS no
+set USE_AIRSPEED no
+set MAVLINK_F vicon

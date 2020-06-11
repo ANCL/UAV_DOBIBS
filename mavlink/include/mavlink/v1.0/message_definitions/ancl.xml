@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<mavlink>
+	<include>common.xml</include>
+	<enums>
+		<enum name="MAV_TYPE">
+			<entry value="28" name="MAV_TYPE_MOCAP">
+				<description>Motion Capture System eg. Vicon</description>
+			</entry>
+		</enum>
+		<enum name="MAV_COMPONENT">
+			<entry value="221" name="MAV_COMP_ID_MOCAP">
+				<description/>
+			</entry>
+		</enum>
+	</enums>
+
+	<messages>
+		<!-- MESSAGE IDs 180 - 229: Space for custom messages in individual projectname_messages.xml files -->
+		<message id="180" name="VICONQ">
+			<field type="uint32_t" name="usec">Timestamp (microseconds, synced to UNIX time or since system boot)</field>
+			<field type="int16_t" name="x">Global X position: 0.1cm -32.768->32.768 (m)</field>
+			<field type="int16_t" name="y">Global Y position: 0.1cm -32.768->32.768 (m)</field>
+			<field type="int16_t" name="z">Global Z position: 0.1cm -32.768->32.768 (m)</field>
+			<field type="int16_t" name="vx">Global X velocity: 0.1cm/s -32.768->32.768 (m/s)</field>
+			<field type="int16_t" name="vy">Global Y velocity: 0.1cm/s -32.768->32.768 (m/s)</field>
+			<field type="int16_t" name="vz">Global Z velocity: 0.1cm/s -32.768->32.768 (m/s)</field>
+			<field type="int16_t" name="q0">Attitude Quaternion 0:*20000,-1.63->1.63</field>
+			<field type="int16_t" name="q1">Attitude Quaternion 1:*20000,-1.63->1.63</field>
+			<field type="int16_t" name="q2">Attitude Quaternion 2:*20000,-1.63->1.63</field>
+			<field type="int16_t" name="q3">Attitude Quaternion 3:*20000,-1.63->1.63</field>
+		</message>
+		<message id="181" name="SAFETY_SWITCH">
+			<field type="uint8_t" name="status">X|X|X|X|X|X|on/off|present</field>
+		</message>
+	</messages>
+</mavlink>
