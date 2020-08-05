@@ -106,7 +106,7 @@ pxh> commander mode ancl2 # change the mode to use backstepping control
 If you run into any problems using the code, please open an [issue](https://help.github.com/en/github/managing-your-work-on-github/creating-an-issue), or you can email one of us:
 
 * Alan F.Lynch <alan.lynch@ualberta.ca>
-* Zhijun Xue <zxue2@ualberta.ca>
+* [Zhijun Xue](https://github.com/wonderfulxue)  <xzj0319@gmail.com>
 * Amir Moeini <moeini@ualberta.ca>
 
 ### 1. Debug the controller
